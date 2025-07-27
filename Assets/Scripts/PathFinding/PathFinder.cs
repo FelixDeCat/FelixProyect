@@ -1,6 +1,10 @@
-using UnityEngine;
 
-public class PathFinder : MonoBehaviour
+namespace IA.PathFinding
 {
-    
+    using UnityEngine;
+
+    public class PathFinder : MonoBehaviour
+    {
+
+    }
 }

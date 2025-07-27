@@ -1,26 +1,30 @@
-using UnityEngine;
-
-[ExecuteInEditMode]
-public class NodeBaker : MonoBehaviour
+namespace IA.PathFinding
 {
-    [SerializeField] bool bake = false;
-    [SerializeField] bool update = false;
-    [SerializeField] float radius = 1.8f;
-    [SerializeField] LayerMask mask;
+    using UnityEngine;
 
-
-    void Update()
+    [ExecuteInEditMode]
+    public class NodeBaker : MonoBehaviour
     {
-        if (bake || update)
+        [SerializeField] bool bake = false;
+        [SerializeField] bool update = false;
+        [SerializeField] float radius = 1.8f;
+        [SerializeField] LayerMask mask;
+
+
+        void Update()
         {
-            bake = false;
-            var nodes = GetComponentsInChildren<UnityNode>();
-
-            for (int i = 0; i < nodes.Length; i++)
+            if (bake || update)
             {
-                nodes[i].EditorBakeNeighborhoods(radius, mask);
-            }
+                bake = false;
+                var nodes = GetComponentsInChildren<UnityNode>();
 
+                for (int i = 0; i < nodes.Length; i++)
+                {
+                    nodes[i].EditorBakeNeighborhoods(radius, mask);
+                }
+
+            }
         }
     }
+
 }

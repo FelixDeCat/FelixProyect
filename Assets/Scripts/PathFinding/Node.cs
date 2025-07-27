@@ -1,36 +1,40 @@
-using System.Collections.Generic;
-using System.Linq;
-
-public class Node
+namespace IA.PathFinding
 {
-    float x = 0f;
-    float y = 0f;
-    float z = 0f;
-    Node[] nodes = null;
+    using System.Collections.Generic;
+    using System.Linq;
 
-    public Node(float x, float y, float z)
+    public class Node
     {
-        this.x = x;
-        this.y = y;
-        this.z = z;
-    }
+        float x = 0f;
+        float y = 0f;
+        float z = 0f;
+        Node[] nodes = null;
 
-    public void AddNeighborhoods(params Node[] _nodes)
-    {
-        if (_nodes == null || _nodes.Length == 0) throw new System.ArgumentException("Los nodos pasados por parametro son null o vacios");
-        if (nodes == null || nodes.Length == 0)
+        public Node(float x, float y, float z)
         {
-            nodes = _nodes;
+            this.x = x;
+            this.y = y;
+            this.z = z;
         }
-        else
+
+        public void AddNeighborhoods(params Node[] _nodes)
         {
-            HashSet<Node> current = new HashSet<Node>(nodes);
-            current.UnionWith(_nodes);
-            nodes = current.ToArray();
+            if (_nodes == null || _nodes.Length == 0) throw new System.ArgumentException("Los nodos pasados por parametro son null o vacios");
+            if (nodes == null || nodes.Length == 0)
+            {
+                nodes = _nodes;
+            }
+            else
+            {
+                HashSet<Node> current = new HashSet<Node>(nodes);
+                current.UnionWith(_nodes);
+                nodes = current.ToArray();
+            }
         }
+
+
+
+
     }
-
-    
-
 
 }
