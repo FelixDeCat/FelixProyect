@@ -5,15 +5,11 @@ namespace IA.DecisionTree
 
     public abstract class ActionNode : Node
     {
-        public Action action;
-        protected void ConfigureActionNode(Action _action)
-        {
-            action = _action;
-        }
+        public abstract void ExecuteAction();
 
         public override void Execute()
         {
-            action.Invoke();
+            ExecuteAction();
         }
     }
 }

@@ -5,17 +5,13 @@ namespace IA.DecisionTree
 
     public abstract class DecisionNode : Node
     {
-        protected void ConfigureDecision(Func<bool> _predicate)
-        {
-            predicate = _predicate;
-        }
-        Func<bool> predicate = delegate { return false; };
         public Node nodeTrue;
         public Node nodeFalse;
+        protected abstract bool Predicate();
 
         public override void Execute()
         {
-            if (predicate.Invoke())
+            if (Predicate())
             {
                 nodeTrue.Execute();
             }
