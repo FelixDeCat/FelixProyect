@@ -1,12 +1,22 @@
 using UnityEngine;
 
-public class MousePointModule : MonoBehaviour
+[System.Serializable]
+public class MousePointModule: IUpdateable, IPausable, IActivable
 {
     [SerializeField] LayerMask mask;
     Ray ray;
     RaycastHit hit;
     [SerializeField] GameObject feedbackPointer;
-    void Update()
+
+    void IActivable.Active() { }
+
+    void IActivable.Deactivate() { }
+
+    void IPausable.Pause() { }
+
+    void IPausable.Resume() { }
+
+    void IUpdateable.Tick(float delta)
     {
         if (Input.GetMouseButtonDown(0))
         {
