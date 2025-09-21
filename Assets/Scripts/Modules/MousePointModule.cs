@@ -27,4 +27,11 @@ public class MousePointModule: IUpdateable, IPausable, IActivable
             }
         }
     }
+
+    public void OnDrawGizmos()
+    {
+        ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Gizmos.color = Color.red;
+        Gizmos.DrawLine(ray.origin, ray.origin + ray.direction * 10);
+    }
 }

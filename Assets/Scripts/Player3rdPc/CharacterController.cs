@@ -1,8 +1,11 @@
+using System;
 using UnityEngine;
 
 [System.Serializable]
-public class CharacterController: IStarteable ,IActivable, IUpdateable, IFixedUpdateable
+public class CharacterController : IStarteable, IActivable, IUpdateable, IFixedUpdateable
 {
+    Func<bool> IsGrounded;
+    public void IsGroundedCallback(Func<bool> _isGrounded) => IsGrounded = _isGrounded;
 
     CameraFollow cam;
     void IStarteable.Start()
@@ -28,58 +31,53 @@ public class CharacterController: IStarteable ,IActivable, IUpdateable, IFixedUp
     Vector3 moveDir = Vector3.zero;
     Quaternion slerp = Quaternion.identity;
     Quaternion desiredRot = Quaternion.identity;
-    float moveY = 0;
+    float originalY = 0;
+    bool ground = true;
     void IUpdateable.Tick(float delta)
     {
         input.x = Input.GetAxis("Horizontal");
         input.z = Input.GetAxis("Vertical");
 
-        if (Input.GetButtonDown("Jump"))
+        ground = IsGrounded();
+
+        if (Input.GetButtonDown("Jump") && ground)
         {
             rb.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
         }
+
     }
 
+    Vector3 result = Vector3.zero;
     void IFixedUpdateable.FixedTick(float delta)
     {
-        // me capturo el y en Velocity, pensando que el velocity venia con algo.
-        // por ejemplo, me estaba moviendo o me estaba cayendo. 
-        // esto me sirve para luego el input no me sobreescriba ese calculo que ya hizo
-        // el motor de fisica
-        moveY = rb.linearVelocity.y;
+        originalY = rb.linearVelocity.y;
 
-        // convierto ese input local a global pero con respecto a la camara
         moveDir = cam.transform.TransformDirection(input);
-
-        // no necesito el y
         moveDir.y = 0;
 
-        // si tengo algo de magnitud hago el resto
         if (moveDir.sqrMagnitude > 0.01f)
         {
-            // este normalize vease que lo pongo aca y no antes para
-            // que la comparacion del sqrmagnitude sea mas precisa
             moveDir.Normalize();
 
-            // me muevo normal como siempre
-            rb.linearVelocity = moveDir * speed;
+            if (ground)
+            {
+                result.x = moveDir.x * speed;
+                result.y = originalY;
+                result.z = moveDir.z * speed;
 
-            // le regreso el "Y" original que tenia antes de modificarlo con mi input
-            // si me estoy cayendo o saltando por ejemplo, el input no interfiere con la caida
-            rb.linearVelocity = new Vector3(rb.linearVelocity.x, moveY, rb.linearVelocity.z);
+                rb.linearVelocity = result;
+            }
 
-            // convierto esa direccion a "Cantidad de rotacion necesaria o deseada"
             desiredRot = Quaternion.LookRotation(moveDir);
-
-            // Roto suavemente
             slerp = Quaternion.Slerp(rb.rotation, desiredRot, turnSpeed * Time.deltaTime);
-
-
             rb.MoveRotation(slerp);
         }
         else
         {
-            rb.linearVelocity = new Vector3(0, moveY, 0);
+            rb.linearVelocity = new Vector3(
+                ground ? 0 : rb.linearVelocity.x,
+                originalY,
+                ground ? 0 : rb.linearVelocity.z);
         }
     }
 }

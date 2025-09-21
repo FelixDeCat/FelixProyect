@@ -1,4 +1,3 @@
-using UnityEditor;
 using UnityEngine;
 
 public class CameraFollow : MonoBehaviour
@@ -26,6 +25,7 @@ public class CameraFollow : MonoBehaviour
     Vector3 velocity = Vector3.zero;
 
     [SerializeField] Vector3 lookRelativeOffset = new Vector3(0.5f, 0.2f, 0f);
+    [SerializeField] Vector3 positionRelativeOffset = new Vector3(0.5f, 0, 0f);
     Vector3 loookTarget;
 
     Rigidbody rig;
@@ -48,7 +48,11 @@ public class CameraFollow : MonoBehaviour
             return transform.forward;
         }
     }
-
+    Vector3 camForwardFlat = Vector3.zero;
+    Vector3 camRightFlat = Vector3.zero;
+    Vector3 basePosition = Vector3.zero;
+    Vector3 desiredPosition = Vector3.zero;
+    Quaternion desiredRot = Quaternion.identity;
     private void LateUpdate()
     {
         //capturo los inputs
@@ -63,12 +67,12 @@ public class CameraFollow : MonoBehaviour
         // calculo la rotacion final en quaternion
         Quaternion rotation = Quaternion.Euler(pitch, yaw, 0);
 
-        Vector3 desiredPosition =
-            rig.position -
+        basePosition =
+            target.position -
              rotation * Vector3.forward * distance +
              Vector3.up * height;
 
-        //transform.position = desiredPosition;
+        desiredPosition = basePosition + rotation * positionRelativeOffset;
 
         transform.position = Vector3.SmoothDamp
             (transform.position,
@@ -77,13 +81,37 @@ public class CameraFollow : MonoBehaviour
             smoothTime);
 
 
-        Vector3 baseTarget = target.position + Vector3.up * 0.5f ;
 
-        loookTarget = baseTarget + transform.right * lookRelativeOffset.x 
-            + transform.up * lookRelativeOffset.y
-            + transform.forward * lookRelativeOffset.z;
 
-        Quaternion desiredRot = Quaternion.LookRotation(loookTarget - transform.position);
+        camForwardFlat = transform.forward;
+        camForwardFlat.y = 0f;
+        camForwardFlat.Normalize();
+
+        // Derecha estable
+        camRightFlat = Vector3.Cross(Vector3.up, camForwardFlat);
+
+
+        Vector3 baseTarget = target.position;
+
+        loookTarget = baseTarget +
+            camRightFlat * lookRelativeOffset.x + 
+            Vector3.up * lookRelativeOffset.y;
+
+
+        desiredRot = Quaternion.LookRotation(loookTarget - transform.position);
         transform.rotation = desiredRot;
     }
+
+
+    //private void OnDrawGizmos()
+    //{
+    //    Gizmos.color = Color.blue;
+    //    Gizmos.DrawSphere(loookTarget, 0.1f);
+
+    //    Gizmos.color = Color.green;
+    //    Gizmos.DrawLine(transform.position, transform.position + camForwardFlat * 5);
+
+    //    Gizmos.color = Color.black;
+    //    Gizmos.DrawLine(transform.position, transform.position + camRightFlat * 5);
+    //}
 }
