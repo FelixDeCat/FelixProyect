@@ -11,7 +11,15 @@ public class CameraFollow : MonoBehaviour
     float yaw;
     float pitch;
     float rotSpeed = 3;
+    public enum CameraMode
+    {
+        none,
+        thirdPersonCam,
+        debug45
+    }
+    public CameraMode mode = CameraMode.thirdPersonCam;
 
+    [Header("Third Person Options")]
     [SerializeField] float minPitch = -30;
     [SerializeField] float maxPitch = 60;
 
@@ -30,6 +38,8 @@ public class CameraFollow : MonoBehaviour
 
     Rigidbody rig;
 
+    [Header("Debug 45 Degrees Hard Follow")]
+    public Vector3 offsetDeb = new Vector3(0, 10, -10);
 
     void Start()
     {
@@ -55,63 +65,57 @@ public class CameraFollow : MonoBehaviour
     Quaternion desiredRot = Quaternion.identity;
     private void LateUpdate()
     {
-        //capturo los inputs
-        float mouseX = Input.GetAxis("Mouse X");
-        float mousey = Input.GetAxis("Mouse Y");
+        if (mode == CameraMode.thirdPersonCam)
+        {
+            //capturo los inputs
+            float mouseX = Input.GetAxis("Mouse X");
+            float mousey = Input.GetAxis("Mouse Y");
 
-        //se los sumo a yaw y pitch, ademas lo clampeo para no pasarse
-        yaw += mouseX * rotSpeed;
-        pitch -= mousey * rotSpeed;
-        pitch = Mathf.Clamp(pitch, minPitch, maxPitch);
+            //se los sumo a yaw y pitch, ademas lo clampeo para no pasarse
+            yaw += mouseX * rotSpeed;
+            pitch -= mousey * rotSpeed;
+            pitch = Mathf.Clamp(pitch, minPitch, maxPitch);
 
-        // calculo la rotacion final en quaternion
-        Quaternion rotation = Quaternion.Euler(pitch, yaw, 0);
+            // calculo la rotacion final en quaternion
+            Quaternion rotation = Quaternion.Euler(pitch, yaw, 0);
 
-        basePosition =
-            target.position -
-             rotation * Vector3.forward * distance +
-             Vector3.up * height;
+            basePosition =
+                target.position -
+                 rotation * Vector3.forward * distance +
+                 Vector3.up * height;
 
-        desiredPosition = basePosition + rotation * positionRelativeOffset;
+            desiredPosition = basePosition + rotation * positionRelativeOffset;
 
-        transform.position = Vector3.SmoothDamp
-            (transform.position,
-            desiredPosition,
-            ref velocity,
-            smoothTime);
+            transform.position = Vector3.SmoothDamp
+                (transform.position,
+                desiredPosition,
+                ref velocity,
+                smoothTime);
 
+            camForwardFlat = transform.forward;
+            camForwardFlat.y = 0f;
+            camForwardFlat.Normalize();
 
-
-
-        camForwardFlat = transform.forward;
-        camForwardFlat.y = 0f;
-        camForwardFlat.Normalize();
-
-        // Derecha estable
-        camRightFlat = Vector3.Cross(Vector3.up, camForwardFlat);
-
-
-        Vector3 baseTarget = target.position;
-
-        loookTarget = baseTarget +
-            camRightFlat * lookRelativeOffset.x + 
-            Vector3.up * lookRelativeOffset.y;
+            // Derecha estable
+            camRightFlat = Vector3.Cross(Vector3.up, camForwardFlat);
 
 
-        desiredRot = Quaternion.LookRotation(loookTarget - transform.position);
-        transform.rotation = desiredRot;
+            Vector3 baseTarget = target.position;
+
+            loookTarget = baseTarget +
+                camRightFlat * lookRelativeOffset.x +
+                Vector3.up * lookRelativeOffset.y;
+
+
+            desiredRot = Quaternion.LookRotation(loookTarget - transform.position);
+            transform.rotation = desiredRot;
+        }
+        else if (mode == CameraMode.debug45)
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+            transform.position = target.position + offsetDeb;
+            transform.LookAt(target);
+        }
     }
-
-
-    //private void OnDrawGizmos()
-    //{
-    //    Gizmos.color = Color.blue;
-    //    Gizmos.DrawSphere(loookTarget, 0.1f);
-
-    //    Gizmos.color = Color.green;
-    //    Gizmos.DrawLine(transform.position, transform.position + camForwardFlat * 5);
-
-    //    Gizmos.color = Color.black;
-    //    Gizmos.DrawLine(transform.position, transform.position + camRightFlat * 5);
-    //}
 }
