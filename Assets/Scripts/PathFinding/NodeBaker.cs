@@ -7,8 +7,6 @@ namespace IA.PathFinding
     {
         [SerializeField] bool bake = false;
         [SerializeField] bool update = false;
-        [SerializeField] float radius = 1.8f;
-        [SerializeField] LayerMask mask;
 
 
         void Update()
@@ -20,7 +18,7 @@ namespace IA.PathFinding
 
                 for (int i = 0; i < nodes.Length; i++)
                 {
-                    nodes[i].EditorBakeNeighborhoods(radius, mask);
+                    nodes[i].BakeNeighbors();
                 }
 
             }

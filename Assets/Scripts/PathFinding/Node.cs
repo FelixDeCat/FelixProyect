@@ -1,4 +1,4 @@
-namespace IA.PathFinding
+namespace IA.PathFinding.Core
 {
     using System.Collections.Generic;
     using System.Linq;

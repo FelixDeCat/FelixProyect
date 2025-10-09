@@ -6,55 +6,119 @@ namespace IA.PathFinding
 
     public class UnityNode : MonoBehaviour
     {
-        [SerializeField] UnityNode[] neighborhoods;
-        [SerializeField] bool drawGizmos;
 
-        public void EditorBakeNeighborhoods(float radius, int layermask)
+        [SerializeField] float detectionRadius = 2f;
+
+        [SerializeField] List<UnityNode> neighbors;
+        public List<UnityNode> Neighbors { get { return neighbors; } }
+
+        UnityNode parent = null;
+        public UnityNode Parent
         {
-            Collider[] cols = Physics.OverlapSphere(this.transform.position, radius, layermask);
-            List<UnityNode> nodes = new List<UnityNode>();
+            get { return parent; }
+        }
+        public void SetParent(UnityNode _p)
+        {
+            parent = _p;
+        }
 
-            for (int i = 0; i < cols.Length; i++)
+        public void Clean()
+        {
+            parent = null;
+        }
+
+        [SerializeField] LayerMask nodeMask;
+        [SerializeField] LayerMask maskview;
+        [SerializeField] LayerMask floorAndObstacles;
+
+        [SerializeField] float maxSlope = 0.5f;
+
+        [Header("Gizmos")]
+        [SerializeField] bool drawRadius = false;
+        [SerializeField] bool drawsphere = false;
+        [SerializeField] bool drawConnections = false;
+
+        [SerializeField] float floorUPOffset = 0.1f;
+
+        public void BakeNeighbors()
+        {
+            Adjust();
+            Detect();
+        }
+
+        void Adjust()
+        {
+
+            if (Physics.Raycast(transform.position + Vector3.up * 10, Vector3.down, out RaycastHit hit, 20, floorAndObstacles))
             {
-                UnityNode node = cols[i].GetComponent<UnityNode>();
-                if (node.Equals(this)) continue;
+                transform.position = hit.point + Vector3.up * floorUPOffset;
+            }
+        }
 
-                Vector3 dir = node.transform.position - this.transform.position;
-                dir.Normalize();
+        void Detect()
+        {
+            neighbors = new List<UnityNode>();
+            Collider[] colls = Physics.OverlapSphere(transform.position, detectionRadius, nodeMask);
 
-                RaycastHit hit;
-
-                if (Physics.Raycast(transform.position, dir, out hit))
+            for (int i = 0; i < colls.Length; i++)
+            {
+                UnityNode node = colls[i].GetComponent<UnityNode>();
+                if (node != null && node != this)
                 {
-                    var hitted = hit.collider.GetComponent<UnityNode>();
-                    if (hitted != null && hitted.Equals(node))
+                    Vector3 dir = node.transform.position - transform.position;
+
+                    Ray ray = new Ray();
+                    ray.origin = transform.position;
+                    ray.direction = dir;
+
+                    if (Physics.Raycast(ray, out RaycastHit hit, dir.magnitude, maskview))
                     {
-                        nodes.Add(node);
+                        UnityNode hitNode = hit.collider.GetComponent<UnityNode>();
+                        if (hitNode != null && hitNode == node)
+                        {
+                            float h = node.transform.position.y - transform.position.y;
+
+                            if (Mathf.Abs(h) < maxSlope)
+                            {
+                                neighbors.Add(node);
+                            }
+                        }
                     }
                 }
-
             }
-
-            neighborhoods = nodes.ToArray();
         }
+
 
         private void OnDrawGizmos()
         {
-            if (!drawGizmos) return;
-            for (int i = 0; i < neighborhoods.Length; i++)
+            if (drawRadius)
+            {
+                Gizmos.color = Color.yellow;
+                Gizmos.DrawWireSphere(transform.position, detectionRadius);
+            }
+
+            if (drawConnections)
             {
                 Gizmos.color = Color.white;
 
-                Vector3 dir = neighborhoods[i].transform.position - transform.position;
-                dir.Normalize();
-                dir /= 2;
+                if (neighbors != null)
+                {
+                    for (int i = 0; i < neighbors.Count; i++)
+                    {
+                        Vector3 dir = neighbors[i].transform.position - transform.position;
 
-                Ray ray = new Ray(transform.position, dir);
+                        dir /= 3;
 
-                Gizmos.DrawLine(transform.position, transform.position + dir);
+                        Gizmos.DrawLine(transform.position, transform.position + dir);
 
+                    }
+                }
+            }
+
+            if (drawsphere)
+            {
                 Gizmos.color = Color.black;
-                Gizmos.DrawSphere(transform.position, 0.1f);
+                Gizmos.DrawSphere(transform.position, 0.05f);
             }
         }
     }
