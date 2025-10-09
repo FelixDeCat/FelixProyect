@@ -1,6 +1,10 @@
 using UnityEngine;
 using UnityEngine.Pool;
 
+/// <summary>
+/// Manager General de referencias UI
+/// </summary>
+
 public class UIGlobalData : MonoSingleton<UIGlobalData>
 {
     [SerializeField] UISlot uislots;

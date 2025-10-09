@@ -8,8 +8,6 @@ public class ThirdPersonCharacter : MonoBehaviour
     [SerializeField] CharacterController characterController;
     [SerializeField] GroundModule groundModule;
 
-    
-
     private void Awake()
     {
         moduleHandler.AddModule(mousePointModule);

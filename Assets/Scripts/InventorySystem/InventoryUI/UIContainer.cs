@@ -37,7 +37,7 @@ public class UIContainer : MonoBehaviour
             }
             else
             {
-                slots[i].Set_Image(InventorySystem.DB[container[i].IndexID].Image);
+                slots[i].Set_Image(InventoryAgentExample.DB[container[i].IndexID].Image);
                 slots[i].Set_Quantity(container[i].Quantity);
             }     
         }
