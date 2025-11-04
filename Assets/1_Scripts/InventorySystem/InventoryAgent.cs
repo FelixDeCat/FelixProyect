@@ -3,29 +3,34 @@ using UnityEngine;
 
 public class InventoryAgent : MonoBehaviour
 {
+    public static InventoryAgent InstanceAgent;
+
+    [SerializeField] bool isAgent;
+
     // ejemplo de inventario
     public Container bag; 
     [SerializeField] UIContainer uiContainer;
 
+
+    private void Awake()
+    {
+        if (isAgent)
+        {
+            InstanceAgent = this;
+        }
+    }
     void Start()
     {
         bag = new Container(32);
         uiContainer.Intialize(bag);
     }
 
-
-    void Update()
+    public void AddElement(int index, int quantity, params int[] states)
     {
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            bag.Add(Random.Range(0, InventoryDataCenter.DB.Length), Random.Range(1,4), 0);
-            uiContainer.Refresh(bag);
-        }
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-
-        }
+        bag.Add(index, quantity, states);
+        uiContainer.Refresh(bag);
     }
+
 }
 
 

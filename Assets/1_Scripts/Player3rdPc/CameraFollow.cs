@@ -47,8 +47,8 @@ public class CameraFollow : MonoBehaviour
         yaw = target.eulerAngles.y;
         pitch = 0;
 
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
+         Cursor.visible = false;
+         Cursor.lockState = CursorLockMode.Locked;
     }
 
     public Vector3 CameraForward
