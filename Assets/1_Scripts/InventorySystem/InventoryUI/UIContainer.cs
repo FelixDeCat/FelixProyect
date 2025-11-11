@@ -64,15 +64,16 @@ public class UIContainer : MonoBehaviour
         var slot = peek(indexInContainer);
         if (slot.IndexID == -1) 
         {
-            CustomConsole.LogStaticText(1, "Empty");
+            CustomConsole.LogStaticText(1, "Item: empty");
+            CustomConsole.LogStaticText(2, "MaxStack: empty");
             return;
         }
-        CustomConsole.LogStaticText(1, InventoryDataCenter.DB[slot.IndexID].Name);
-        CustomConsole.LogStaticText(2, InventoryDataCenter.DB[slot.IndexID].MaxStack.ToString());
+        CustomConsole.LogStaticText(1, $"Item: {InventoryDataCenter.DB[slot.IndexID].Name}",color: Color.yellow);
+        CustomConsole.LogStaticText(2, $"MaxStack: {InventoryDataCenter.DB[slot.IndexID].MaxStack.ToString()}", color: Color.yellow);
     }
     public void OnPointerExit(int indexInContainer)
     {
-        CustomConsole.LogStaticText(1, String.Empty);
-        CustomConsole.LogStaticText(2, String.Empty);  
+        CustomConsole.LogStaticText(1, "Item:", Color.gray);
+        CustomConsole.LogStaticText(2, "MaxStack:", Color.gray);
     }
 }
