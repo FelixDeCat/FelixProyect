@@ -7,11 +7,13 @@ public class ItemData : ScriptableObject
     [SerializeField] string description;
     [SerializeField] int maxStack;
     [SerializeField] Sprite image;
+    [SerializeField] ItemRecolectable model;
 
     public string Name { get { return item_name; } }
     public string Description { get { return description; } }
     public int MaxStack { get { return maxStack; } }
     public Sprite Image { get => image; }
+    public ItemRecolectable Model { get { return model; } }
 
 }
 

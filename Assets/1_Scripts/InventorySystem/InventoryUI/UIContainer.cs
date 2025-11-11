@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,15 +15,19 @@ public class UIContainer : MonoBehaviour
 {
     [SerializeField] RectTransform parent;
     List<UISlot> slots;
+    Func<int,Slot> peek = null;
 
     public void Intialize(Container container)
     {
+        peek = ID =>
+        {
+            return container[ID];
+        };
         slots = new List<UISlot>(container.MaxCapacity);
         for (int i = 0; i < container.MaxCapacity; i++)
         {
             UISlot slot = GameObject.Instantiate(UIGlobalData.model_ui_slots, parent);
-            slot.txt_quant.text = " ";
-            slot.image.sprite = null;
+            slot.Set_Empty();
             slots.Add(slot);
         }
         _refresh(container);
@@ -47,7 +52,27 @@ public class UIContainer : MonoBehaviour
             {
                 slots[i].Set_Image(InventoryDataCenter.DB[container[i].IndexID].Image);
                 slots[i].Set_Quantity(container[i].Quantity);
-            }     
+                
+            }
+            slots[i].Set_ContainerIndex(i);
+            slots[i].SetCallback_PointerEnterExit(OnPointerEnter, OnPointerExit);
         }
+    }
+
+    public void OnPointerEnter(int indexInContainer)
+    {
+        var slot = peek(indexInContainer);
+        if (slot.IndexID == -1) 
+        {
+            CustomConsole.LogStaticText(1, "Empty");
+            return;
+        }
+        CustomConsole.LogStaticText(1, InventoryDataCenter.DB[slot.IndexID].Name);
+        CustomConsole.LogStaticText(2, InventoryDataCenter.DB[slot.IndexID].MaxStack.ToString());
+    }
+    public void OnPointerExit(int indexInContainer)
+    {
+        CustomConsole.LogStaticText(1, String.Empty);
+        CustomConsole.LogStaticText(2, String.Empty);  
     }
 }

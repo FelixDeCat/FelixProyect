@@ -4,15 +4,17 @@ using UnityEngine;
 public class ThirdPersonCharacter : MonoBehaviour
 {
     [SerializeField] ModuleHandler moduleHandler;
-    [SerializeField] MousePointModule mousePointModule;
+    [SerializeField] MousePointModule mousePoint;
     [SerializeField] CharacterController characterController;
     [SerializeField] GroundModule groundModule;
+    [SerializeField] InteractModule interactModule;
 
     private void Awake()
     {
-        moduleHandler.AddModule(mousePointModule);
+        moduleHandler.AddModule(mousePoint);
         moduleHandler.AddModule(characterController);
         moduleHandler.AddModule(groundModule);
+        moduleHandler.AddModule(interactModule);
 
         characterController.IsGroundedCallback(groundModule.IsGrounded);
     }
@@ -51,6 +53,6 @@ public class ThirdPersonCharacter : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        mousePointModule.OnDrawGizmos();
+        mousePoint.OnDrawGizmos();
     }
 }

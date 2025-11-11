@@ -16,3 +16,4 @@ MonoBehaviour:
   description: 
   maxStack: 10
   image: {fileID: -639530837, guid: a25451e143407414aa1f8a383b987074, type: 3}
+  model: {fileID: 3073669931008061827, guid: e024c71db3ce49b449a075e51766e8a7, type: 3}

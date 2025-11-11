@@ -76,7 +76,6 @@ GameObject:
   - component: {fileID: 759773854784368720}
   - component: {fileID: 7572308892313622406}
   - component: {fileID: 516539755692368174}
-  - component: {fileID: 2007485769692768862}
   m_Layer: 0
   m_Name: PLayer
   m_TagString: Untagged
@@ -112,7 +111,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc3a3d69cb66da44d8f83c575db02ac6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mousePointModule:
+  mousePoint:
     mask:
       serializedVersion: 2
       m_Bits: 64
@@ -130,6 +129,11 @@ MonoBehaviour:
     root: {fileID: 7796905561080899211}
     count: 0
     debug: 0
+  interactModule:
+    interactables:
+      serializedVersion: 2
+      m_Bits: 512
+    maxDistance: 8
 --- !u!54 &7572308892313622406
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -180,22 +184,6 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
---- !u!114 &2007485769692768862
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2232635283746116369}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55f54497e7077ed4d9ab8c3e321a7786, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::InteractModule
-  interactables:
-    serializedVersion: 2
-    m_Bits: 512
-  maxDistance: 3
 --- !u!1 &2878074383975230117
 GameObject:
   m_ObjectHideFlags: 0
@@ -682,3 +670,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::InventoryAgent
   isAgent: 1
   uiContainer: {fileID: 0}
+  root: {fileID: 7796905561080899211}

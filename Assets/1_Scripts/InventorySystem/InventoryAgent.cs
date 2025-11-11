@@ -11,6 +11,8 @@ public class InventoryAgent : MonoBehaviour
     public Container bag; 
     [SerializeField] UIContainer uiContainer;
 
+    [SerializeField] Transform root;
+
 
     private void Awake()
     {
@@ -23,6 +25,16 @@ public class InventoryAgent : MonoBehaviour
     {
         bag = new Container(32);
         uiContainer.Intialize(bag);
+
+        
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            ItemSpawner.SpawnItem(4, root.position + root.forward * 2 + transform.up);
+        }
     }
 
     public void AddElement(int index, int quantity, params int[] states)

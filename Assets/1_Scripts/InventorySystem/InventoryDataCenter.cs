@@ -5,6 +5,9 @@ public class InventoryDataCenter : MonoSingleton<InventoryDataCenter>
 {
     [SerializeField] ItemData[] dataBase;
     Item[] items;
+
+    
+
     public static Item[] DB
     {
         get
@@ -12,9 +15,18 @@ public class InventoryDataCenter : MonoSingleton<InventoryDataCenter>
             return Instance.items;
         }
     }
+    public static ItemData[] DataBase
+    {
+        get
+        {
+            return Instance.dataBase;
+        }
+    }
 
     public override void SingletonAwake()
     {
+        
+
         items = new Item[dataBase.Length];
         for (int i = 0; i < dataBase.Length; i++)
         {
