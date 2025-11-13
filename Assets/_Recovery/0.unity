@@ -944,6 +944,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Canvas_Console
       objectReference: {fileID: 0}
+    - target: {fileID: 114558856347462212, guid: ad9c92437a9765344b30032644768f9c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1044053033045823589, guid: ad9c92437a9765344b30032644768f9c, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -962,30 +966,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1051775911525564046, guid: ad9c92437a9765344b30032644768f9c, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1348049730719179156, guid: ad9c92437a9765344b30032644768f9c, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1348049730719179156, guid: ad9c92437a9765344b30032644768f9c, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1348049730719179156, guid: ad9c92437a9765344b30032644768f9c, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1348049730719179156, guid: ad9c92437a9765344b30032644768f9c, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1348049730719179156, guid: ad9c92437a9765344b30032644768f9c, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1348049730719179156, guid: ad9c92437a9765344b30032644768f9c, type: 3}
-      propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1983628946250871373, guid: ad9c92437a9765344b30032644768f9c, type: 3}
@@ -1967,6 +1947,10 @@ PrefabInstance:
     - target: {fileID: 7928169653975403279, guid: 237f1039c7f146a46a9b9586646dfde9, type: 3}
       propertyPath: m_Name
       value: Core_CharacterController
+      objectReference: {fileID: 0}
+    - target: {fileID: 7928169653975403279, guid: 237f1039c7f146a46a9b9586646dfde9, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

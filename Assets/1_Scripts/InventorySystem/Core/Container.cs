@@ -48,4 +48,17 @@ public class Container
 
         return resultant;
     }
+    public int RemoveQuantityFromPosition(int index_container, int quant_to_remove)
+    {
+        if (index_container < 0 || index_container >= items.Count)
+            throw new System.IndexOutOfRangeException("Índice fuera de rango");
+
+        if (quant_to_remove < 0)
+            throw new System.ArgumentOutOfRangeException(nameof(quant_to_remove), "La cantidad a eliminar no puede ser negativa.");
+
+        if (quant_to_remove == 0) return 0;
+
+        var slot = items[index_container];
+        return slot.TakeFromStack(quant_to_remove);
+    }
 }

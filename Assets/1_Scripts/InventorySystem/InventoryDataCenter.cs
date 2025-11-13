@@ -15,6 +15,28 @@ public class InventoryDataCenter : MonoSingleton<InventoryDataCenter>
             return Instance.items;
         }
     }
+    public static Item Get_Item_ByID(int ID)
+    {
+        if (ID == -1)
+        {
+            return Item.ItemNull;
+        }
+        if (ID >= Instance.items.Length || ID < 0) 
+        {
+            CustomConsole.LogError($"Intentando obtener Item con ID fuera de Rango -> <color=yellow>ID: {ID}</color>");
+            return null;
+        }
+        return Instance.items[ID];
+    }
+    public static ItemData Get_ItemData_ByID(int ID)
+    {
+        if (ID >= Instance.items.Length || ID < 0) 
+        {
+            CustomConsole.LogError($"Intentando obtener ItemData con ID fuera de Rango -> <color=yellow>ID: {ID}</color>");
+            return null;
+        }
+        return Instance.dataBase[ID];
+    }
     public static ItemData[] DataBase
     {
         get

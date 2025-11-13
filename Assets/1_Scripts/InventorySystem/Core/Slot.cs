@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.WSA;
 
 // Item individual por inventario, por entidad, serializable para guardar partida
 
@@ -23,7 +24,12 @@ public class Slot
         qualitystates = null;
     }
     public int IndexID { get { return index_id; } }
-    public int Quantity { get { return quantity; } }
+    public int Quantity { 
+        get 
+        { 
+            return quantity; 
+        }
+    }
     public int[] QualityStates { get { return qualitystates; } }
 
     public void Set(int index, int quantity, params int[] qualityStates)
@@ -50,6 +56,31 @@ public class Slot
         quantity += quantToAdd;
 
         return toAdd - quantToAdd; // Devuelve lo que no pudo agregarse (0 si todo entró)
+    }
+    public int TakeFromStack(int toRemove)
+    {
+        if (toRemove < 0)
+            throw new System.ArgumentOutOfRangeException(nameof(toRemove), "La cantidad a eliminar no puede ser negativa.");
+
+        if (toRemove == 0)
+            return 0;
+
+        if (index_id == -1 || quantity <= 0)
+        {
+            EmptyStack();
+            return toRemove;
+        }
+
+        if (toRemove >= quantity)
+        {
+            int remain = toRemove - quantity;
+            EmptyStack();
+            return remain;
+        }
+
+        quantity -= toRemove;
+        return 0;
+
     }
 
     public static Slot[] EmptyInventory(int capacity)

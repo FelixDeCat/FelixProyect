@@ -15,19 +15,19 @@ public class UIContainer : MonoBehaviour
 {
     [SerializeField] RectTransform parent;
     List<UISlot> slots;
-    Func<int,Slot> peek = null;
 
-    public void Intialize(Container container)
+    public void Intialize(Container container, Action<int> onEnter, Action<int> onExit, Action<int,int> onDown, Action<int, int> onUp)
     {
-        peek = ID =>
-        {
-            return container[ID];
-        };
         slots = new List<UISlot>(container.MaxCapacity);
         for (int i = 0; i < container.MaxCapacity; i++)
         {
             UISlot slot = GameObject.Instantiate(UIGlobalData.model_ui_slots, parent);
             slot.Set_Empty();
+
+            slot.Set_ContainerIndex(i);
+            slot.SetCallback_PointerEnterExit(onEnter, onExit);
+            slot.SetCallback_PointerDownUp(onDown, onUp);
+
             slots.Add(slot);
         }
         _refresh(container);
@@ -37,7 +37,6 @@ public class UIContainer : MonoBehaviour
     {
         _refresh(container);
     }
-
     void _refresh(Container container)
     {
         if (container.MaxCapacity != slots.Count) throw new System.Exception("No tiene la misma cantidad de elementos");
@@ -52,28 +51,7 @@ public class UIContainer : MonoBehaviour
             {
                 slots[i].Set_Image(InventoryDataCenter.DB[container[i].IndexID].Image);
                 slots[i].Set_Quantity(container[i].Quantity);
-                
             }
-            slots[i].Set_ContainerIndex(i);
-            slots[i].SetCallback_PointerEnterExit(OnPointerEnter, OnPointerExit);
         }
-    }
-
-    public void OnPointerEnter(int indexInContainer)
-    {
-        var slot = peek(indexInContainer);
-        if (slot.IndexID == -1) 
-        {
-            CustomConsole.LogStaticText(1, "Item: empty");
-            CustomConsole.LogStaticText(2, "MaxStack: empty");
-            return;
-        }
-        CustomConsole.LogStaticText(1, $"Item: {InventoryDataCenter.DB[slot.IndexID].Name}",color: Color.yellow);
-        CustomConsole.LogStaticText(2, $"MaxStack: {InventoryDataCenter.DB[slot.IndexID].MaxStack.ToString()}", color: Color.yellow);
-    }
-    public void OnPointerExit(int indexInContainer)
-    {
-        CustomConsole.LogStaticText(1, "Item:", Color.gray);
-        CustomConsole.LogStaticText(2, "MaxStack:", Color.gray);
     }
 }

@@ -20,4 +20,17 @@ public class Item
     public int MaxStack { get { return maxStack; } }
     public Sprite Image { get => image; }
 
+    static Item itemNull = null;
+    public static Item ItemNull
+    {
+        get
+        {
+            if (itemNull == null)
+            {
+                itemNull = new Item("NULL","NULL",0,null);
+            }
+            return itemNull;
+        }
+    }
+
 }

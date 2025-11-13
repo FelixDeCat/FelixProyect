@@ -5,6 +5,7 @@ using UnityEngine.Pool;
 public class ItemSpawner : MonoSingleton<ItemSpawner>
 {
     ResultMsg indexOutOfRangeException;
+    ResultMsg minusOne;
     ResultMsg doesNotHaveModel;
     ResultMsg sucessfull;
     Dictionary<int, ObjectPool<ItemRecolectable>> pools = new Dictionary<int, ObjectPool<ItemRecolectable>>();
@@ -12,28 +13,34 @@ public class ItemSpawner : MonoSingleton<ItemSpawner>
     public override void SingletonAwake()
     {
         indexOutOfRangeException = new ResultMsg(false, "Index out of range Exception");
+        minusOne = new ResultMsg(false, "In Ou Of Ra Ex: minus One Index");
         doesNotHaveModel = new ResultMsg(false, "Item does not have an model");
         sucessfull = new ResultMsg(true, "Sucess!!");
     }
 
-    public static ResultMsg SpawnItem(int index, Vector3 position) => Instance._spawnItem(index, position);
-    ResultMsg _spawnItem(int index, Vector3 position)
+    public static ResultMsg SpawnItem(int indexID, Vector3 position, int quantity = 1) => Instance._spawnItem(indexID, position, quantity);
+    ResultMsg _spawnItem(int indexID, Vector3 position, int quant = 1)
     {
-        if (index >= InventoryDataCenter.DataBase.Length) 
+        if (indexID >= InventoryDataCenter.DataBase.Length) 
             return indexOutOfRangeException;
 
-        var current = InventoryDataCenter.DataBase[index].Model;
+        if (indexID == -1) return minusOne;
+
+        var current = InventoryDataCenter.DataBase[indexID].Model;
 
         if (current == null)
             return doesNotHaveModel;
 
-        if (!pools.ContainsKey(index))
+        if (!pools.ContainsKey(indexID))
         {
-            CreatePool(index, current);
+            CreatePool(indexID, current);
         }
 
-        var go = pools[index].Get();
-        go.transform.position = position;
+        for (int i = 0; i < quant; i++)
+        {
+            var go = pools[indexID].Get();
+            go.transform.position = position;
+        }
 
         return sucessfull;
     }
