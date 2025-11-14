@@ -10,6 +10,8 @@ public class ItemSpawner : MonoSingleton<ItemSpawner>
     ResultMsg sucessfull;
     Dictionary<int, ObjectPool<ItemRecolectable>> pools = new Dictionary<int, ObjectPool<ItemRecolectable>>();
 
+    const int MAX_STEPS = 1000;
+
     public override void SingletonAwake()
     {
         indexOutOfRangeException = new ResultMsg(false, "Index out of range Exception");
@@ -21,7 +23,7 @@ public class ItemSpawner : MonoSingleton<ItemSpawner>
     public static ResultMsg SpawnItem(int indexID, Vector3 position, int quantity = 1) => Instance._spawnItem(indexID, position, quantity);
     ResultMsg _spawnItem(int indexID, Vector3 position, int quant = 1)
     {
-        if (indexID >= InventoryDataCenter.DataBase.Length) 
+        if (indexID >= InventoryDataCenter.DataBase.Length)
             return indexOutOfRangeException;
 
         if (indexID == -1) return minusOne;
@@ -36,10 +38,26 @@ public class ItemSpawner : MonoSingleton<ItemSpawner>
             CreatePool(indexID, current);
         }
 
-        for (int i = 0; i < quant; i++)
+        int steps = 0;
+        while (quant > 0)
         {
+            if(steps++ > MAX_STEPS)
+            {
+                var ex = new System.Exception($"ItemSpawner: abortando spawn porque se superó el máximo de iteraciones ({MAX_STEPS}) para index {indexID}");
+                throw ex;
+            }
+
             var go = pools[indexID].Get();
+            int prev = quant;
+            quant = go.ActivateItemRecolectable(indexID, quant);
             go.transform.position = position;
+
+            if (quant == prev)
+            {
+                var ex = new System.Exception("ActiveItemRecolectable no redujo la cantidad de objetos");
+                _returnItem(indexID, go);
+                throw ex;
+            }
         }
 
         return sucessfull;
@@ -65,8 +83,16 @@ public class ItemSpawner : MonoSingleton<ItemSpawner>
                 go.transform.SetParent(this.transform);
                 return go;
             },
-            actionOnGet: item => item.gameObject.SetActive(true),
-            actionOnRelease: item => item.gameObject.SetActive(false),
+            actionOnGet: item =>
+            {
+                item.gameObject.SetActive(true);
+                item.ResetItemRecolectable();
+            },
+            actionOnRelease: item =>
+            {
+                item.ResetItemRecolectable();
+                item.gameObject.SetActive(false);
+            },
             actionOnDestroy: item => Destroy(item.gameObject),
             collectionCheck: true,
             defaultCapacity: 10,

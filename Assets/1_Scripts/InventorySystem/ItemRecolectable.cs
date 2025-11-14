@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using UnityEngine;
 
 public class ItemRecolectable : MonoBehaviour
@@ -7,24 +8,50 @@ public class ItemRecolectable : MonoBehaviour
     
     [SerializeField] Interactable interactable;
 
-    // TO DO: luego esto cambiar por el max stack de cada elemento, esto es para optimizar
-    // para que se generen grupos y no tener x ejemplo 40 elementos individuales dispersos
-    // cuando se puede tener 2 grupos de 20
-    public int stacked = 1;
+    int maxStack = 1;
+    [SerializeField] int currQ = 0;
+
+    [SerializeField] bool debugQuantity;
+    [SerializeField] TextMeshPro debText;
 
     private void Awake()
     {
         interactable.SetInteractable(OnRecolect, OnGetInfo);
     }
 
-    private void Start()
+    public int ActivateItemRecolectable(int _indexElement, int newQ = 1)
     {
-        stacked = InventoryDataCenter.DB[indexElement].MaxStack;
+        debText.gameObject.SetActive(true);
+
+        int remain = newQ;
+        indexElement = _indexElement;
+        maxStack = InventoryDataCenter.DB[indexElement].MaxStack;
+
+        if (newQ + currQ >= maxStack)
+        {
+            remain = (newQ + currQ) - maxStack;
+            currQ = maxStack;
+
+            debText.text = currQ.ToString() + " R: " + remain;
+            return remain;
+        }
+
+        currQ = currQ + newQ;
+        remain = 0;
+
+        debText.text = currQ.ToString() + " R: " + remain;
+        return remain;
+    }
+    public void ResetItemRecolectable()
+    {
+        maxStack = 0;
+        currQ = 0;
+        indexElement = -1;
     }
 
     void OnRecolect()
     {
-        InventoryAgent.InstanceAgent.AddElement(indexElement, 1);
+        InventoryAgent.InstanceAgent.AddElement(indexElement, currQ);
         ItemSpawner.ReturnItem(indexElement, this);
     }
     string OnGetInfo()
