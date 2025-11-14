@@ -15,7 +15,7 @@ TagManager:
   - node
   - obstacle
   - interactables
-  - 
+  - NoPlayerInteract
   - 
   - 
   - 
