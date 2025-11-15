@@ -43,6 +43,27 @@ public class InventoryAgent : MonoBehaviour
                     center: spawnPos,
                     radius: 2f));
         }
+        if (Input.GetKeyDown(KeyCode.Y))
+        {
+            ItemSpawner.SpawnItem(6, 
+                Tools.Random_XZ_PosInBound(
+                    center: spawnPos,
+                    radius: 2f));
+        }
+        if (Input.GetKeyDown(KeyCode.U))
+        {
+            ItemSpawner.SpawnItem(7, 
+                Tools.Random_XZ_PosInBound(
+                    center: spawnPos,
+                    radius: 2f));
+        }
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            ItemSpawner.SpawnItem(8, 
+                Tools.Random_XZ_PosInBound(
+                    center: spawnPos,
+                    radius: 2f));
+        }
     }
 
     public void AddElement(int index_ID, int quantity, params int[] states)
