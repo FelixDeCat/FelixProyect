@@ -1,0 +1,3 @@
+[submodule "Assets/MyTools/IntegratedUnityConsole"]
+	path = Assets/MyTools/IntegratedUnityConsole
+	url = https://github.com/FelixDeCat/IntegratedUnityConsole.git
