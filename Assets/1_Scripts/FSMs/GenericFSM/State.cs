@@ -1,15 +1,9 @@
 using UnityEngine;
 
-public class State : MonoBehaviour
+public abstract class State : MonoBehaviour
 {
-    
-    void Start()
-    {
-        
-    }
+    public abstract void OnEnter();
+    public abstract void OnExit();
+    public abstract void OnUpdate();
 
-    void Update()
-    {
-        
-    }
 }
