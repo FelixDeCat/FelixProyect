@@ -1,5 +1,5 @@
 using UnityEngine;
-using IA.DecisionTree;
+using AI.DecisionTree;
 
 public class Decision_CanSeeEnemy : DecisionNode
 {

@@ -1,4 +1,4 @@
-namespace IA.DecisionTree
+namespace AI.DecisionTree
 {
     using UnityEngine;
 

@@ -17,7 +17,6 @@ public class GroundModule : IStarteable
         count = Physics.RaycastNonAlloc(root.position + Vector3.up * 0.5f, Vector3.down, hits, maxDistance, mask);
         return count > 0;
     }
-
     void IStarteable.Start()
     {
         hits = new RaycastHit[3];

@@ -8,9 +8,10 @@ public class MousePointModule: IUpdateable, IPausable, IActivable
     RaycastHit hit;
     [SerializeField] GameObject feedbackPointer;
 
-    void IActivable.Active() { }
+    bool active = false;
+    void IActivable.Active() { active = true; }
 
-    void IActivable.Deactivate() { }
+    void IActivable.Deactivate() { active = false; }
 
     void IPausable.Pause() { }
 
@@ -18,6 +19,7 @@ public class MousePointModule: IUpdateable, IPausable, IActivable
 
     void IUpdateable.Tick(float delta)
     {
+        if (!active) return;
         if (Input.GetMouseButtonDown(0) && feedbackPointer != null)
         {
             ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -30,6 +32,7 @@ public class MousePointModule: IUpdateable, IPausable, IActivable
 
     public void OnDrawGizmos()
     {
+        if (!active) return;
         ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         Gizmos.color = Color.red;
         Gizmos.DrawLine(ray.origin, ray.origin + ray.direction * 10);

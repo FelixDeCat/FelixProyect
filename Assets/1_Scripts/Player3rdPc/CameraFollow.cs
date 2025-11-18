@@ -1,12 +1,8 @@
 using UnityEngine;
 
-public class CameraFollow : MonoBehaviour
+public class CameraFollow : MonoSingleton<CameraFollow>
 {
-    public static CameraFollow instance;
-    private void Awake()
-    {
-        instance = this;
-    }
+
 
     float yaw;
     float pitch;
@@ -41,14 +37,27 @@ public class CameraFollow : MonoBehaviour
     [Header("Debug 45 Degrees Hard Follow")]
     public Vector3 offsetDeb = new Vector3(0, 10, -10);
 
+    public override void SingletonAwake()
+    {
+        
+    }
+
     void Start()
     {
         rig = target.GetComponent<Rigidbody>();
         yaw = target.eulerAngles.y;
         pitch = 0;
 
-         //Cursor.visible = false;
-         //Cursor.lockState = CursorLockMode.Locked;
+         
+    }
+
+    bool isActive;
+    public void Activate(bool value) //toDO hacer una animacion si me lo pide el inventario tipo me acerco
+    {
+        isActive = value;
+
+        Cursor.visible = !value;
+        Cursor.lockState = value ? CursorLockMode.Locked : CursorLockMode.None;
     }
 
     public Vector3 CameraForward
@@ -65,6 +74,8 @@ public class CameraFollow : MonoBehaviour
     Quaternion desiredRot = Quaternion.identity;
     private void LateUpdate()
     {
+        if (!isActive) return;
+
         if (mode == CameraMode.thirdPersonCam)
         {
             //capturo los inputs
@@ -118,4 +129,6 @@ public class CameraFollow : MonoBehaviour
             transform.LookAt(target);
         }
     }
+
+    
 }

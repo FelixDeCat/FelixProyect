@@ -14,6 +14,8 @@ public class UISlot : UIBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     [SerializeField] Action<int, int> onPointerDown;
     [SerializeField] Action<int, int> onPointerUp;
 
+    Color color_transp = new Color(0,0,0,0);
+
     public void Set_ContainerIndex(int index)
     {
         indexInContainer = index;
@@ -25,6 +27,7 @@ public class UISlot : UIBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     public void Set_Image(Sprite sp)
     {
         image.sprite = sp;
+        image.color = Color.white;
     }
     public void Set_Quantity(int quant)
     {
@@ -41,6 +44,7 @@ public class UISlot : UIBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     public void Set_Empty()
     {
         image.sprite = null;
+        image.color = color_transp;
         txt_quant.text = string.Empty;
     }
 

@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 [System.Serializable]
-public class CharacterController : IStarteable, IActivable, IUpdateable, IFixedUpdateable
+public class CharacterController : IStarteable, IUpdateable, IFixedUpdateable, IActivable
 {
     Func<bool> IsGrounded;
     public void IsGroundedCallback(Func<bool> _isGrounded) => IsGrounded = _isGrounded;
@@ -10,17 +10,7 @@ public class CharacterController : IStarteable, IActivable, IUpdateable, IFixedU
     CameraFollow cam;
     void IStarteable.Start()
     {
-        cam = CameraFollow.instance;
-    }
-
-    bool active = false;
-    void IActivable.Active()
-    {
-        active = true;
-    }
-    void IActivable.Deactivate()
-    {
-        active = false;
+        cam = CameraFollow.Instance;
     }
 
     [SerializeField] Rigidbody rb;
@@ -35,6 +25,7 @@ public class CharacterController : IStarteable, IActivable, IUpdateable, IFixedU
     bool ground = true;
     void IUpdateable.Tick(float delta)
     {
+        if (!active) return;
         input.x = Input.GetAxis("Horizontal");
         input.z = Input.GetAxis("Vertical");
 
@@ -50,6 +41,7 @@ public class CharacterController : IStarteable, IActivable, IUpdateable, IFixedU
     Vector3 result = Vector3.zero;
     void IFixedUpdateable.FixedTick(float delta)
     {
+        if (!active) return;
         originalY = rb.linearVelocity.y;
 
         moveDir = cam.transform.TransformDirection(input);
@@ -80,4 +72,9 @@ public class CharacterController : IStarteable, IActivable, IUpdateable, IFixedU
                 ground ? 0 : rb.linearVelocity.z);
         }
     }
+
+    bool active = false;
+    void IActivable.Active() { active = true; }
+
+    void IActivable.Deactivate() { active = false; }
 }

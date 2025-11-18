@@ -26,7 +26,7 @@ public class ModuleHandler
 
     public void Start() => starteables.ForEach(x => x.Start());
     public void Activate() => activables.ForEach(x => x.Active());
-    public void Deactivate() => activables.ForEach(x => x.Active());
+    public void Deactivate() => activables.ForEach(x => x.Deactivate());
     public void Pause() => pausables.ForEach(x => x.Pause());
     public void Resume() => pausables.ForEach(x => x.Resume());
     public void Reset() => reseteables.ForEach(x => x.ResetModule());

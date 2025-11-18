@@ -73,6 +73,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7796905561080899211}
+  - component: {fileID: 56184095744020805}
   - component: {fileID: 759773854784368720}
   - component: {fileID: 7572308892313622406}
   - component: {fileID: 516539755692368174}
@@ -99,6 +100,19 @@ Transform:
   - {fileID: 1029357473278600093}
   m_Father: {fileID: 335292536082800209}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &56184095744020805
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2232635283746116369}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b7d6248e7c6a574bacff27a2a41daed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InputController
+  character: {fileID: 759773854784368720}
 --- !u!114 &759773854784368720
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -134,6 +148,7 @@ MonoBehaviour:
       serializedVersion: 2
       m_Bits: 512
     maxDistance: 8
+  toolFSM: {}
 --- !u!54 &7572308892313622406
 Rigidbody:
   m_ObjectHideFlags: 0

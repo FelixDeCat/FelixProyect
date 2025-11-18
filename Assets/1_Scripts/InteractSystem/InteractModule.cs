@@ -1,11 +1,11 @@
+using System;
 using TMPro;
 using UnityEngine;
 
 [System.Serializable]
-public class InteractModule: IStarteable, IPausable, IUpdateable
+public class InteractModule: IStarteable, IPausable, IUpdateable, IActivable
 {
 
-    bool isPaused;
     [SerializeField] LayerMask interactables;
     Vector3 center;
     Ray ray;
@@ -21,6 +21,8 @@ public class InteractModule: IStarteable, IPausable, IUpdateable
 
     void IUpdateable.Tick(float delta)
     {
+        if (!active) return; 
+
         ray = Camera.main.ScreenPointToRay(center);
 
         if (Physics.Raycast(ray, out info, maxDistance, interactables))
@@ -46,13 +48,16 @@ public class InteractModule: IStarteable, IPausable, IUpdateable
 
     void IPausable.Pause()
     {
-        isPaused = true;
+        
     }
 
     void IPausable.Resume()
     {
-        isPaused = false;
+        
     }
 
-   
+    bool active = false;
+    void IActivable.Active() { active = true; }
+
+    void IActivable.Deactivate() { active = false; }
 }
