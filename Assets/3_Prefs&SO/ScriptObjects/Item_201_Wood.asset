@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   item_name: wood
   description: 
-  maxStack: 20
+  maxStack: 5
   image: {fileID: 1070932909, guid: a25451e143407414aa1f8a383b987074, type: 3}
   model: {fileID: 8933933225621124848, guid: f5a7f05d26cf0c047b049642326d996f, type: 3}

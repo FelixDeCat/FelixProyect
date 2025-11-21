@@ -27,7 +27,7 @@ public class Item
         {
             if (itemNull == null)
             {
-                itemNull = new Item("NULL","NULL",0,null);
+                itemNull = new Item("NULL", "NULL", 0, null);
             }
             return itemNull;
         }

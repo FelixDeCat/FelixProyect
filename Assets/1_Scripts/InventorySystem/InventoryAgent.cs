@@ -30,7 +30,7 @@ public class InventoryAgent : MonoBehaviour
     }
     void Start()
     {
-        container = new Container(32);
+        container = new Container(3);
         uiContainer.Intialize(container, OnPointerEnter, OnPointerExit, OnPointerDown, OnPointerUp);
     }
 
@@ -65,19 +65,13 @@ public class InventoryAgent : MonoBehaviour
                     center: spawnPos,
                     radius: 2f));
         }
-        if (Input.GetKeyDown(KeyCode.I))
-        {
-            ItemSpawner.SpawnItem(8, 
-                Tools.Random_XZ_PosInBound(
-                    center: spawnPos,
-                    radius: 2f));
-        }
     }
 
-    public void AddElement(int index_ID, int quantity, params int[] states)
+    public int TryAddElement(int index_ID, int quantity, params int[] states)
     {
-        container.Add(index_ID, quantity, states);
+        container.TryAdd(index_ID, quantity, out int remain);
         uiContainer.Refresh(container);
+        return remain;
     }
 
     public int RemoveElement(int index_container, int quantity)
@@ -120,6 +114,12 @@ public class InventoryAgent : MonoBehaviour
         var slot = container[_indexInContainer];
         currentIndex = _indexInContainer;
 
+        var item = InventoryDataCenter.Get_Valid_Item_ByID(slot.IndexID, debug: false);
+        if (item != null)
+        {
+            CustomConsole.LogStaticText(3, $"Down::{_pointerID}::{item.Name.FiveChar()}", Color.green);
+        }
+
         if (_pointerID == -1) // show por ahora TODO: agarrar
         {
             if (Input.GetKey(KeyCode.LeftShift))
@@ -153,7 +153,10 @@ public class InventoryAgent : MonoBehaviour
             }
             
         }
-        CustomConsole.LogStaticText(3, $"Down::{_pointerID}::{InventoryDataCenter.Get_Item_ByID(slot.IndexID).Name.FiveChar()}", Color.green);
+
+        
+
+        
     }
     public void OnPointerUp(int _indexInContainer, int _pointerID)
     {
@@ -175,12 +178,20 @@ public class InventoryAgent : MonoBehaviour
         }
         else
         {
-            if (_pointerID == -3)
-            {
-                
-            }
+            
         }
 
-            CustomConsole.LogStaticText(3, $"Up__::{_pointerID}::{InventoryDataCenter.Get_Item_ByID(slot.IndexID).Name.FiveChar()}", Color.red);
+        if (_pointerID == -3)
+        {
+            var item = InventoryDataCenter.Get_Valid_Item_ByID(slot.IndexID, debug: false);
+            if (item != null)
+            {
+                CustomConsole.LogStaticText(3, $"Down::{_pointerID}::{item.Name.FiveChar()}", Color.green);
+            }
+            else
+            {
+                CustomConsole.LogStaticText(3, $"Down::{_pointerID}::null", Color.green);
+            }
+        }
     }
 }

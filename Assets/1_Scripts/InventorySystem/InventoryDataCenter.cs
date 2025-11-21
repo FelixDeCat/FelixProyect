@@ -6,24 +6,19 @@ public class InventoryDataCenter : MonoSingleton<InventoryDataCenter>
     [SerializeField] ItemData[] dataBase;
     Item[] items;
 
-    
-
     public static Item[] DB
     {
         get
         {
+            if (Instance.items == null) throw new System.Exception("Base de Datos no Inicializada");
             return Instance.items;
         }
     }
-    public static Item Get_Item_ByID(int ID)
+    public static Item Get_Valid_Item_ByID(int ID, bool debug = true)
     {
-        if (ID == -1)
-        {
-            return Item.ItemNull;
-        }
         if (ID >= Instance.items.Length || ID < 0) 
         {
-            CustomConsole.LogError($"Intentando obtener Item con ID fuera de Rango -> <color=yellow>ID: {ID}</color>");
+            if(debug) CustomConsole.LogError($"Intentando obtener Item con ID fuera de Rango -> <color=yellow>ID: {ID}</color>");
             return null;
         }
         return Instance.items[ID];

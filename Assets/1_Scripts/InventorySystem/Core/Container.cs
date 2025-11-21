@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -23,24 +24,28 @@ public class Container
         private set => items[index] = value;
     }
     public int MaxCapacity { get { return capacity; } }
-    public int Add(int index, int quantity, params int[] states)
+    public int Add(int ID, int quant, params int[] states)
     {
-        if (index < 0) throw new System.IndexOutOfRangeException("El indice a agrega no puede ser menor a cero");
+        if (ID < 0) throw new System.IndexOutOfRangeException("El indice a agregar no puede ser menor a cero");
 
-        int resultant = quantity;
-        Item itemSelected = InventoryDataCenter.DB[index];
+        int resultant = quant;
+        Item itemSelected = InventoryDataCenter.Get_Valid_Item_ByID(ID);
+        if (itemSelected == null) 
+        {
+            return quant;
+        }
 
         for (int i = 0; i < items.Count; i++)
         {
             // si ya no me queda para agregar me salgo
             if (resultant <= 0) return 0;
 
-            if (items[i].IndexID != -1 && items[i].IndexID != index) continue;
+            if (items[i].IndexID != -1 && items[i].IndexID != ID) continue;
 
             //si era casillero vacio
             if (items[i].IndexID == -1)
             {
-                items[i].Set(index, 0, states);
+                items[i].Set(ID, 0, states);
             }
 
             resultant = items[i].AddQuantity(resultant);
@@ -48,6 +53,75 @@ public class Container
 
         return resultant;
     }
+
+    public bool HaveReceip(/*Receip*/)
+    {
+        return false;
+    }
+    public int CanAdd(int ID, int quant)
+    {
+        if (quant <= 0) throw new System.ArgumentException("La cantidad no puede ser cero");
+
+        Item itm = InventoryDataCenter.Get_Valid_Item_ByID(ID);
+        if (itm == null)
+        {
+            return quant;
+        }
+
+        int resultant = quant;
+
+        for (int i = 0; i < items.Count; i++)
+        {
+            if (resultant <= 0) return 0;
+
+            resultant = items[i].Query_CanAdd(resultant, ID);
+        }
+        return resultant; 
+    }
+
+    public bool TryAdd(int ID, int quant, out int remainder, params int[] states)
+    {
+        if (ID < 0) throw new System.IndexOutOfRangeException("El indice a agregar no puede ser menor a cero");
+        if (quant < 0) throw new System.ArgumentOutOfRangeException(nameof(quant), "La cantidad no puede ser negativa.");
+        if (quant == 0)
+        {
+            CustomConsole.LogError("Cantidad a agregar CERO");
+            remainder = 0;
+            return true;
+        }
+
+        Item itemSelected = InventoryDataCenter.Get_Valid_Item_ByID(ID);
+        if (itemSelected == null)
+        {
+            CustomConsole.LogError("Item Invalido");
+            remainder = quant;
+            return false;
+        }
+
+        int resultant = quant;
+
+        for (int i = 0; i < items.Count; i++)
+        {
+            if (resultant <= 0) break;
+
+            if (items[i].CanNOTAddInThisSlot(ID)) continue;
+
+            if (items[i].IndexID == -1) 
+            {
+                CustomConsole.Log("agregando en casillero vacio");
+                items[i].Set(ID, 0, states); 
+            }
+            
+        
+
+            resultant = items[i].AddQuantity(resultant);
+        }
+
+        remainder = resultant;
+
+        return remainder == 0;
+    }
+
     public int RemoveQuantityFromPosition(int index_container, int quant_to_remove)
     {
         if (index_container < 0 || index_container >= items.Count)

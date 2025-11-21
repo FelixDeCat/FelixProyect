@@ -63,16 +63,11 @@ public class CameraFollow : MonoSingleton<CameraFollow>
     public void ChangeMode(CameraMode _mode)
     {
         mode = _mode;
-        if (mode == CameraMode.debug45)
-        {
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
-        }
-        else if(mode == CameraMode.thirdPersonCam)
-        {
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
-        }
+    }
+    public void ActiveCursor(bool val)
+    {
+        Cursor.visible = val;
+        Cursor.lockState = val ? CursorLockMode.None : CursorLockMode.Locked;
     }
 
     public Vector3 CameraForward

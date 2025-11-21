@@ -22,12 +22,13 @@ public class InputController : MonoBehaviour
             {
                 CameraFollow.Instance.ChangeMode(CameraFollow.CameraMode.thirdPersonCam);
                 CameraFollow.Instance.Activate(true);
+                CameraFollow.Instance.ActiveCursor(true);
                 character.Activate();
             })
             .OnExit(() => 
             { 
-                CameraFollow.Instance.Activate(false);
-                character.Deactivate();
+                //CameraFollow.Instance.Activate(false);
+                //character.Deactivate();
             })
             .OnUpdate(() =>
             {

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ItemRecolectable : MonoBehaviour
 {
-    public int indexElement = 0;
+    public int indexID = 0;
     
     [SerializeField] Interactable interactable;
 
@@ -26,7 +26,7 @@ public class ItemRecolectable : MonoBehaviour
     {
         if (placeHolder)
         {
-            spriteRenderer.sprite = InventoryDataCenter.DB[indexElement].Image;
+            spriteRenderer.sprite = InventoryDataCenter.DB[indexID].Image;
         }
     }
 
@@ -35,8 +35,8 @@ public class ItemRecolectable : MonoBehaviour
         debText.gameObject.SetActive(true);
 
         int remain = newQ;
-        indexElement = _indexElement;
-        maxStack = InventoryDataCenter.DB[indexElement].MaxStack;
+        indexID = _indexElement;
+        maxStack = InventoryDataCenter.DB[indexID].MaxStack;
 
         if (newQ + currQ >= maxStack)
         {
@@ -57,17 +57,31 @@ public class ItemRecolectable : MonoBehaviour
     {
         maxStack = 0;
         currQ = 0;
-        indexElement = -1;
+        indexID = -1;
     }
 
     void OnRecolect()
     {
-        InventoryAgent.InstanceAgent.AddElement(indexElement, currQ);
-        ItemSpawner.ReturnItem(indexElement, this);
+
+        int remain = InventoryAgent.InstanceAgent.TryAddElement(indexID, currQ);
+        if (remain == currQ) return; //sonido no se puede agregar
+
+        if (remain > 0)
+        {
+            CustomConsole.Log($"Se intentó agregar {currQ.ToString().Paint(Color.yellow)}, pero sobró {remain.ToString().Paint(Color.red)}");
+
+            ItemSpawner.SpawnItem(indexID,
+                Tools.Random_XZ_PosInBound(
+                    center: this.transform.position,
+                    radius: 2f),
+                remain);
+        }
+
+        ItemSpawner.ReturnItem(indexID, this);
     }
     string OnGetInfo()
     {
-        return InventoryDataCenter.DB[indexElement].Name;
+        return InventoryDataCenter.DB[indexID].Name;
     }
 
 
