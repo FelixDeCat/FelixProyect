@@ -43,7 +43,7 @@ public class ItemSpawner : MonoSingleton<ItemSpawner>
         {
             if(steps++ > MAX_STEPS)
             {
-                var ex = new System.Exception($"ItemSpawner: abortando spawn porque se superó el máximo de iteraciones ({MAX_STEPS}) para index {indexID}");
+                var ex = new System.Exception($"ItemSpawner: abortando spawn porque se superó el máximo de iteraciones ({MAX_STEPS}) para _i {indexID}");
                 throw ex;
             }
 

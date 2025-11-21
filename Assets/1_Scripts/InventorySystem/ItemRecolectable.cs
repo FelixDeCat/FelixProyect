@@ -14,9 +14,20 @@ public class ItemRecolectable : MonoBehaviour
     [SerializeField] bool debugQuantity;
     [SerializeField] TextMeshPro debText;
 
+    [SerializeField] bool placeHolder = false;
+    [SerializeField] SpriteRenderer spriteRenderer;
+
     private void Awake()
     {
         interactable.SetInteractable(OnRecolect, OnGetInfo);
+    }
+
+    private void Start()
+    {
+        if (placeHolder)
+        {
+            spriteRenderer.sprite = InventoryDataCenter.DB[indexElement].Image;
+        }
     }
 
     public int ActivateItemRecolectable(int _indexElement, int newQ = 1)

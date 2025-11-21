@@ -36,6 +36,14 @@ public class InventoryAgent : MonoBehaviour
 
     private void Update()
     {
+
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            ItemSpawner.SpawnItem(Random.Range(0,InventoryDataCenter.DB.Length),
+                Tools.Random_XZ_PosInBound(
+                    center: spawnPos,
+                    radius: 2f));
+        }
         if (Input.GetKeyDown(KeyCode.T))
         {
             ItemSpawner.SpawnItem(4, 

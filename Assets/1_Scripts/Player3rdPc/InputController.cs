@@ -12,6 +12,7 @@ public class InputController : MonoBehaviour
     EState menues;
     EState inventories;
     EState animations;
+    EState deb45;
 
     private void Start()
     {
@@ -19,6 +20,7 @@ public class InputController : MonoBehaviour
             .OnInitialize(() => { })
             .OnEnter(() => 
             {
+                CameraFollow.Instance.ChangeMode(CameraFollow.CameraMode.thirdPersonCam);
                 CameraFollow.Instance.Activate(true);
                 character.Activate();
             })
@@ -33,19 +35,27 @@ public class InputController : MonoBehaviour
                 {
                     ChangeState(inventories);
                 }
-
                 if (Input.GetKeyDown(KeyCode.Escape))
                 {
-                    ChangeState(paused);
+                    ChangeState(deb45);
                 }
             }
             );
 
         paused = new EState()
             .OnInitialize(() => { })
-            .OnEnter(() => { Time.timeScale = 0; })
-            .OnExit(() => { Time.timeScale = 1; })
-            .OnUpdate(() => { });
+            .OnEnter(() => 
+            { 
+                Time.timeScale = 0; 
+            })
+            .OnExit(() => 
+            { 
+                Time.timeScale = 1;
+            })
+            .OnUpdate(() => 
+            { 
+
+            });
 
         menues = new EState()
             .OnInitialize(() => { })
@@ -55,6 +65,27 @@ public class InputController : MonoBehaviour
             })
             .OnExit(() => { })
             .OnUpdate(() => { });
+
+        deb45 = new EState()
+            .OnInitialize(() => { })
+            .OnEnter(() =>
+            {
+                CameraFollow.Instance.ChangeMode(CameraFollow.CameraMode.debug45);
+                CameraFollow.Instance.Activate(true);
+                character.Activate();
+            })
+            .OnExit(() => 
+            { 
+                CameraFollow.Instance.ChangeMode(CameraFollow.CameraMode.thirdPersonCam);
+                CameraFollow.Instance.Activate(false);
+            })
+            .OnUpdate(() => 
+            {
+                if (Input.GetKeyDown(KeyCode.Escape))
+                {
+                    ChangeState(playing);
+                }
+            });
 
         inventories = new EState()
             .OnInitialize(() => { })
