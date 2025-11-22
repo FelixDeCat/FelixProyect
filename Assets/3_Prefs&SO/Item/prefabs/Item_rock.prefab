@@ -363,11 +363,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07811ef691779534397891ca70c6bac5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ItemRecolector
-  indexElement: 7
+  indexID: 0
   interactable: {fileID: 6143396116797788316}
   currQ: 0
   debugQuantity: 1
   debText: {fileID: 4364139399699438255}
+  placeHolder: 0
+  spriteRenderer: {fileID: 0}
+  Rigidbody: {fileID: 1339235502246140995}
 --- !u!65 &37312357473418537
 BoxCollider:
   m_ObjectHideFlags: 0

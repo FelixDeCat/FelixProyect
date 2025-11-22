@@ -10,10 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7b3e7a936c682434a92f8aec1643a127, type: 3}
-  m_Name: Item_202_Rock
+  m_Name: Item_304_Meat
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  item_name: rock
+  item_name: meat
   description: 
   maxStack: 10
-  image: {fileID: 1935780775, guid: a25451e143407414aa1f8a383b987074, type: 3}
-  model: {fileID: 8933933225621124848, guid: f8e9bf3bfebeb4b4cb1b639dffda103d, type: 3}
+  image: {fileID: -639530837, guid: a25451e143407414aa1f8a383b987074, type: 3}
+  model: {fileID: 9075929468719335131, guid: e024c71db3ce49b449a075e51766e8a7, type: 3}
+  behaviour: {fileID: 4319159200868261906, guid: fe89783c6005a9d4f9664695216e8711, type: 3}

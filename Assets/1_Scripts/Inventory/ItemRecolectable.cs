@@ -17,6 +17,8 @@ public class ItemRecolectable : MonoBehaviour
     [SerializeField] bool placeHolder = false;
     [SerializeField] SpriteRenderer spriteRenderer;
 
+    [SerializeField] Rigidbody Rigidbody;
+
     private void Awake()
     {
         interactable.SetInteractable(OnRecolect, OnGetInfo);
@@ -52,6 +54,10 @@ public class ItemRecolectable : MonoBehaviour
 
         debText.text = currQ.ToString() + " R: " + remain;
         return remain;
+    }
+    public void ApplyForce(Vector3 origin)
+    {
+
     }
     public void ResetItemRecolectable()
     {

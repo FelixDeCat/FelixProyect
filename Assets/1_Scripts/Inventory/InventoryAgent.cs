@@ -30,7 +30,7 @@ public class InventoryAgent : MonoBehaviour
     }
     void Start()
     {
-        container = new Container(3);
+        container = new Container(18);
         uiContainer.Intialize(container, OnPointerEnter, OnPointerExit, OnPointerDown, OnPointerUp);
     }
 
@@ -115,10 +115,13 @@ public class InventoryAgent : MonoBehaviour
         currentIndex = _indexInContainer;
 
         var item = InventoryDataCenter.Get_Valid_Item_ByID(slot.IndexID, debug: false);
-        if (item != null)
+        if (item == null)
         {
-            CustomConsole.LogStaticText(3, $"Down::{_pointerID}::{item.Name.FiveChar()}", Color.green);
+            return;
+            
         }
+
+        CustomConsole.LogStaticText(3, $"Down::{_pointerID}::{item.Name.FiveChar()}", Color.green);
 
         if (_pointerID == -1) // show por ahora TODO: agarrar
         {
@@ -133,6 +136,26 @@ public class InventoryAgent : MonoBehaviour
         }
         else if (_pointerID == -2)
         {
+            // usar item
+
+            int ID = container[_indexInContainer].IndexID;
+            ItemData idata = InventoryDataCenter.DataBase[ID];
+            var result = ItemUseManager.Instance.UseBehaviour(ID, idata.Behaviour);
+
+            switch (result)
+            {
+                case UseResult.Success:
+                    break;
+                case UseResult.Fail:
+                    break;
+                case UseResult.Consume:
+                    container.RemoveQuantityFromPosition(_indexInContainer, 1);
+                    break;
+                case UseResult.Equip:
+                    break;
+                default:
+                    break;
+            }
 
         }
         else if (_pointerID == -3)
@@ -151,12 +174,12 @@ public class InventoryAgent : MonoBehaviour
             {
                 ItemSpawner.SpawnItem(dropID, spawnPos, quant);
             }
-            
+
         }
 
-        
 
-        
+        uiContainer.Refresh(container);
+
     }
     public void OnPointerUp(int _indexInContainer, int _pointerID)
     {
