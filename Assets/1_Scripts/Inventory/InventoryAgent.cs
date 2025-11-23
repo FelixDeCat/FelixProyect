@@ -140,21 +140,25 @@ public class InventoryAgent : MonoBehaviour
 
             int ID = container[_indexInContainer].IndexID;
             ItemData idata = InventoryDataCenter.DataBase[ID];
-            var result = ItemUseManager.Instance.UseBehaviour(ID, idata.Behaviour);
 
-            switch (result)
+            if (idata.Behaviour != null)
             {
-                case UseResult.Success:
-                    break;
-                case UseResult.Fail:
-                    break;
-                case UseResult.Consume:
-                    container.RemoveQuantityFromPosition(_indexInContainer, 1);
-                    break;
-                case UseResult.Equip:
-                    break;
-                default:
-                    break;
+                var result = ItemUseManager.Instance.UseBehaviour(ID, idata.Behaviour);
+
+                switch (result)
+                {
+                    case UseResult.Success:
+                        break;
+                    case UseResult.Fail:
+                        break;
+                    case UseResult.Consume:
+                        container.RemoveQuantityFromPosition(_indexInContainer, 1);
+                        break;
+                    case UseResult.Equip:
+                        break;
+                    default:
+                        break;
+                }
             }
 
         }

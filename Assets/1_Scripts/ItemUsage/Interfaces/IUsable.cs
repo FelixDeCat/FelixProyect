@@ -7,5 +7,5 @@ public enum UseResult
 }
 public interface IUsable
 {
-    public UseResult Use();
+    public UseResult Use(int ID);
 }

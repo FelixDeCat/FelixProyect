@@ -34,7 +34,7 @@ public class ItemUseManager : MonoSingleton<ItemUseManager>
         #endregion
     }
 
-    public UseResult UseItem(IUsable usable)
+    public UseResult UseItem(IUsable usable, int ID)
     {
         if (usable is IEquipable equipNew)
         {
@@ -63,7 +63,7 @@ public class ItemUseManager : MonoSingleton<ItemUseManager>
             }
 
             slots[type] = equipNew;
-            equipNew.Equip();
+            equipNew.Equip(ID);
 
             return UseResult.Success;
         }
@@ -71,7 +71,7 @@ public class ItemUseManager : MonoSingleton<ItemUseManager>
         {
             try
             {
-                return usable.Use();
+                return usable.Use(ID);
             }
             catch (System.Exception ex)
             {
@@ -81,14 +81,14 @@ public class ItemUseManager : MonoSingleton<ItemUseManager>
         }
     }
 
-    public UseResult UseBehaviour(int index, UsabeBehaviour behaviour)
+    public UseResult UseBehaviour(int ID, UsabeBehaviour behaviour)
     {
-        if (!behaviours.ContainsKey(index))
+        if (!behaviours.ContainsKey(ID))
         {
-            behaviours.Add(index, Instantiate(behaviour, this.transform));
+            behaviours.Add(ID, Instantiate(behaviour, this.transform));
         }
 
-        return UseItem(behaviours[index]);
+        return UseItem(behaviours[ID], ID);
     }
 }
 

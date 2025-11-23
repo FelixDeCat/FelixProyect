@@ -5,16 +5,16 @@ public abstract class EquipableBehaviour : UsabeBehaviour, IEquipable
     [SerializeField] EquipableType type;
     EquipableType IEquipable.Type { get => type; }
 
-    public override UseResult OnUse()
+    public override UseResult OnUse(int ID)
     {
         // nothing
 
         return UseResult.Fail;
     }
 
-    void IEquipable.Equip()
+    void IEquipable.Equip(int ID)
     {
-        OnEquip();
+        OnEquip(ID);
     }
 
     void IEquipable.UnEquip()
@@ -22,7 +22,7 @@ public abstract class EquipableBehaviour : UsabeBehaviour, IEquipable
         OnUnEquip();
     }
 
-    protected abstract void OnEquip();
+    protected abstract void OnEquip(int ID);
     protected abstract void OnUnEquip();
 
 

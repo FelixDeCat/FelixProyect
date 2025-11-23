@@ -1,4 +1,16 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
+
+public enum KeyToAffect
+{
+    life,
+    energy,
+    speed,
+    strenght,
+    mana,
+    command
+}
 
 [CreateAssetMenu(fileName = "ItemData", menuName = "Items/Item")]
 public class ItemData : ScriptableObject
@@ -9,6 +21,7 @@ public class ItemData : ScriptableObject
     [SerializeField] Sprite image;
     [SerializeField] ItemRecolectable model;
     [SerializeField] UsabeBehaviour behaviour;
+    [SerializeField] List<Command> commands;
 
     public string Name { get { return item_name; } }
     public string Description { get { return description; } }
@@ -16,6 +29,14 @@ public class ItemData : ScriptableObject
     public Sprite Image { get => image; }
     public ItemRecolectable Model { get { return model; } }
     public UsabeBehaviour Behaviour { get { return behaviour; } }
+    public List<Command> Commands { get { return commands; } }
 
+}
+
+[Serializable]
+public class Command
+{
+    public KeyToAffect KeyToAffect;
+    public int value;
 }
 
