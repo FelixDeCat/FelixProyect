@@ -6,6 +6,7 @@ public abstract class UsabeBehaviour : MonoBehaviour, IUsable
     {
         return OnUse(ID);
     }
-
     public abstract UseResult OnUse(int ID);
+
+    
 }

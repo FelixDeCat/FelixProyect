@@ -4,5 +4,3 @@ public interface IEquipable
     public void Equip(int ID);
     public void UnEquip();
 }
-
-

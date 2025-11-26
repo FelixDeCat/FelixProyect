@@ -2,13 +2,12 @@ using UnityEngine;
 
 public abstract class EquipableBehaviour : UsabeBehaviour, IEquipable
 {
-    [SerializeField] EquipableType type;
+    [SerializeField] protected EquipableType type;
     EquipableType IEquipable.Type { get => type; }
 
     public override UseResult OnUse(int ID)
     {
         // nothing
-
         return UseResult.Fail;
     }
 

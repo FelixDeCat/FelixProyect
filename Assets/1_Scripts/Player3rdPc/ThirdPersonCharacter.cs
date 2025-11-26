@@ -9,6 +9,7 @@ public class ThirdPersonCharacter : MonoBehaviour, IPausable
     [SerializeField] GroundModule           groundModule;
     [SerializeField] InteractModule         interactModule;
     [SerializeField] ToolSSM                toolFSM;
+    [SerializeField] EquipDataManager       equipDataManager;
 
     bool isPaused = false;
 
@@ -19,6 +20,7 @@ public class ThirdPersonCharacter : MonoBehaviour, IPausable
         moduleHandler.AddModule(groundModule);
         moduleHandler.AddModule(interactModule);
         moduleHandler.AddModule(toolFSM);
+        moduleHandler.AddModule(equipDataManager);
 
         characterController.IsGroundedCallback(groundModule.IsGrounded);
     }
