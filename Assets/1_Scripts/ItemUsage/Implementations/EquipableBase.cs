@@ -12,7 +12,7 @@ public class EquipableBase : EquipableBehaviour
         if (item == null) throw new System.Exception("Item no se encuentra");
 
         currentName = item.Name;
-        current = await InstanceManager.FindAndPoolObject(path: "Equipables", name: currentName);
+        current = await InstanceResourceManager.FindAndPoolObject(path: "Equipables", name: currentName);
         current.name = currentName;
         
         switch (item.Equipable.Type)
@@ -53,8 +53,6 @@ public class EquipableBase : EquipableBehaviour
 
     protected override void OnUnEquip()
     {
-        InstanceManager.Release(current.name, current);
-        current = null;
-        currentName = string.Empty;
+        InstanceResourceManager.Release(current.name, current);
     }
 }

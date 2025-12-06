@@ -3,23 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-
-public enum ActionResultOnUse
-{
-    nothing,
-    consume,
-    equip
-}
-
-public class ItemUseManager : MonoSingleton<ItemUseManager>
+[System.Serializable]
+public class ItemUseManager
 {
     [SerializeField] EquipmentManager equipManager;
     [SerializeField] UsableManager useManager;
-
-    public override void SingletonAwake()
-    {
-
-    }
 
     public UseResult UseBehaviour(int ID)
     {

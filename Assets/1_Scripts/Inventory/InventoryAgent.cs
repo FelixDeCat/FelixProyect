@@ -5,13 +5,15 @@ public class InventoryAgent : MonoBehaviour
 {
     public static InventoryAgent InstanceAgent;
 
-    [SerializeField] bool isAgent;
+    [SerializeField] bool isPrincipalAgent = false;
 
     // ejemplo de inventario
     public Container container; 
     [SerializeField] UIContainer uiContainer;
 
     [SerializeField] Transform root;
+
+    ItemUseManager usage;
 
     Vector3 spawnPos
     {
@@ -23,7 +25,7 @@ public class InventoryAgent : MonoBehaviour
 
     private void Awake()
     {
-        if (isAgent)
+        if (isPrincipalAgent)
         {
             InstanceAgent = this;
         }
@@ -32,6 +34,11 @@ public class InventoryAgent : MonoBehaviour
     {
         container = new Container(18);
         uiContainer.Intialize(container, OnPointerEnter, OnPointerExit, OnPointerDown, OnPointerUp);
+    }
+
+    public void SetItemUsageManager(ItemUseManager itemUseManager)
+    {
+        usage = itemUseManager;
     }
 
     private void Update()
@@ -140,7 +147,7 @@ public class InventoryAgent : MonoBehaviour
 
             int ID = container[_indexInContainer].IndexID;
 
-            var result = ItemUseManager.Instance.UseBehaviour(ID);
+            var result = usage.UseBehaviour(ID);
 
             switch (result)
             {

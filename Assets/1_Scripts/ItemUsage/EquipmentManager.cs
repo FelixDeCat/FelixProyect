@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using UnityEngine;
 
-public class EquipmentManager : MonoBehaviour
+[System.Serializable]
+public class EquipmentManager
 {
     Dictionary<EquipableType, EquipedItemInfo> equip = new Dictionary<EquipableType, EquipedItemInfo>();
+    [SerializeField] Transform parent;
 
-    private void Awake()
-    {
-
-    }
 
     public UseResult TryEquip(EquipableBehaviour current, int ID)
     {
@@ -19,7 +17,7 @@ public class EquipmentManager : MonoBehaviour
         if (!equip.TryGetValue(equipable_type, out EquipedItemInfo info))
         {
             Debug.LogWarning($"ItemUseManager: ranura no registrada: {equipable_type}");
-            info = new EquipedItemInfo(_parent: transform);
+            info = new EquipedItemInfo(_parent: parent);
             equip[equipable_type] = info;
         }
 

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Pool;
 
-public class InstanceManager : MonoSingleton<InstanceManager>
+public class InstanceResourceManager : MonoSingleton<InstanceResourceManager>
 {
     public Dictionary<string,ObjectPool<GameObject>> objects = new Dictionary<string, ObjectPool<GameObject>>();
 

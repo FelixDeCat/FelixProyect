@@ -2,8 +2,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class UsableManager : MonoBehaviour
+[System.Serializable]
+public class UsableManager
 {
+    [SerializeField] Transform parent;
     Dictionary<int, UsableBehaviour> usables = new Dictionary<int, UsableBehaviour>();
 
     public UseResult TryUse(UsableBehaviour usable, int ID)
@@ -16,7 +18,7 @@ public class UsableManager : MonoBehaviour
 
         if (!usables.ContainsKey(KEY))
         {
-            usables.Add(KEY, Instantiate(usable, this.transform));
+            usables.Add(KEY, GameObject.Instantiate(usable, parent));
         }
 
         return usable.Use(ID);
