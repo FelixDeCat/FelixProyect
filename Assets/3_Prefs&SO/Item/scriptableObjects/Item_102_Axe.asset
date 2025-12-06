@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b3e7a936c682434a92f8aec1643a127, type: 3}
   m_Name: Item_102_Axe
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  item_name: pickaxe
+  item_name: axe
   description: 
   maxStack: 1
-  image: {fileID: 333850086, guid: a25451e143407414aa1f8a383b987074, type: 3}
-  model: {fileID: 8933933225621124848, guid: 4c7341ab5f3497b45a309bc7d6e5b143, type: 3}
-  behaviour: {fileID: 0}
-  commands: []
+  image: {fileID: 432159845, guid: 45a868d793892514fb880c87f41f4b91, type: 3}
+  model: {fileID: 8933933225621124848, guid: b76716a1254d0504c9befa56b9e9a90a, type: 3}
+  usable: {fileID: 0}
+  equipable: {fileID: 5419949792927708262, guid: 0fc4412405348a04f9701dbeabdb7843, type: 3}
+  parameters: []

@@ -2,11 +2,24 @@ using UnityEngine;
 
 public class EquipableBase : EquipableBehaviour
 {
-    protected override void OnEquip(int ID)
+    [SerializeField] GameObject current;
+    string currentName;
+
+    Transform currentParent;
+    protected async override void OnEquip(int ID)
     {
-        switch (type)
+        var item = InventoryDataCenter.Get_ItemData_ByID(ID);
+        if (item == null) throw new System.Exception("Item no se encuentra");
+
+        currentName = item.Name;
+        current = await InstanceManager.FindAndPoolObject(path: "Equipables", name: currentName);
+        current.name = currentName;
+        
+        switch (item.Equipable.Type)
         {
             case EquipableType.oneHand:
+                currentParent = EquipDataManager.RightHand;
+                
                 break;
             case EquipableType.twoHand:
                 break;
@@ -31,10 +44,17 @@ public class EquipableBase : EquipableBehaviour
             case EquipableType.neck:
                 break;
         }
+
+        current.transform.SetParent(currentParent);
+        current.transform.position = EquipDataManager.RightHand.position;
+        current.transform.localRotation = Quaternion.identity;
+
     }
 
     protected override void OnUnEquip()
     {
-        
+        InstanceManager.Release(current.name, current);
+        current = null;
+        currentName = string.Empty;
     }
 }

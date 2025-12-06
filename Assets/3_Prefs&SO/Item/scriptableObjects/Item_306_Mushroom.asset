@@ -16,3 +16,7 @@ MonoBehaviour:
   description: 
   maxStack: 20
   image: {fileID: -2028834397, guid: a25451e143407414aa1f8a383b987074, type: 3}
+  model: {fileID: 0}
+  usable: {fileID: 4319159200868261906, guid: fe89783c6005a9d4f9664695216e8711, type: 3}
+  equipable: {fileID: 0}
+  parameters: []

@@ -139,26 +139,21 @@ public class InventoryAgent : MonoBehaviour
             // usar item
 
             int ID = container[_indexInContainer].IndexID;
-            ItemData idata = InventoryDataCenter.DataBase[ID];
 
-            if (idata.Behaviour != null)
+            var result = ItemUseManager.Instance.UseBehaviour(ID);
+
+            switch (result)
             {
-                var result = ItemUseManager.Instance.UseBehaviour(ID, idata.Behaviour);
-
-                switch (result)
-                {
-                    case UseResult.Success:
-                        break;
-                    case UseResult.Fail:
-                        break;
-                    case UseResult.Consume:
-                        container.RemoveQuantityFromPosition(_indexInContainer, 1);
-                        break;
-                    case UseResult.Equip:
-                        break;
-                    default:
-                        break;
-                }
+                case UseResult.Success:
+                    break;
+                case UseResult.Fail:
+                    CustomConsole.Log("Fallo al usar ID: " + ID);
+                    break;
+                case UseResult.Consume:
+                    container.RemoveQuantityFromPosition(_indexInContainer, 1);
+                    break;
+                default:
+                    break;
             }
 
         }

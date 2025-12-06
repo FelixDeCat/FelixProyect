@@ -1,22 +1,14 @@
-using UnityEngine;
 
-public abstract class EquipableBehaviour : UsabeBehaviour, IEquipable
+public abstract class EquipableBehaviour : ItemBehaviour
 {
-    [SerializeField] protected EquipableType type;
-    EquipableType IEquipable.Type { get => type; }
+    public EquipableType Type;
 
-    public override UseResult OnUse(int ID)
-    {
-        // nothing
-        return UseResult.Fail;
-    }
-
-    void IEquipable.Equip(int ID)
+    public void Equip(int ID)
     {
         OnEquip(ID);
     }
 
-    void IEquipable.UnEquip()
+    public void UnEquip()
     {
         OnUnEquip();
     }

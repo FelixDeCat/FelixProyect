@@ -17,7 +17,6 @@ MonoBehaviour:
   maxStack: 10
   image: {fileID: -639530837, guid: a25451e143407414aa1f8a383b987074, type: 3}
   model: {fileID: 9075929468719335131, guid: e024c71db3ce49b449a075e51766e8a7, type: 3}
-  behaviour: {fileID: 4319159200868261906, guid: fe89783c6005a9d4f9664695216e8711, type: 3}
-  commands:
-  - KeyToAffect: 0
-    value: 20
+  usable: {fileID: 4319159200868261906, guid: fe89783c6005a9d4f9664695216e8711, type: 3}
+  equipable: {fileID: 0}
+  parameters: []

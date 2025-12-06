@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 
 public enum ActionResultOnUse
@@ -12,98 +13,49 @@ public enum ActionResultOnUse
 
 public class ItemUseManager : MonoSingleton<ItemUseManager>
 {
-
-    Dictionary<EquipableType, IEquipable> slots = new Dictionary<EquipableType, IEquipable>();
-    Dictionary<int, UsabeBehaviour> behaviours = new Dictionary<int, UsabeBehaviour>();
+    [SerializeField] EquipmentManager equipManager;
+    [SerializeField] UsableManager useManager;
 
     public override void SingletonAwake()
     {
-        #region Initialize Dictionary
-        slots.Add(EquipableType.oneHand, null);
-        slots.Add(EquipableType.twoHand, null);
-        slots.Add(EquipableType.head, null);
-        slots.Add(EquipableType.chest, null);
-        slots.Add(EquipableType.pants, null);
-        slots.Add(EquipableType.back, null);
-        slots.Add(EquipableType.foots, null);
-        slots.Add(EquipableType.space1, null);
-        slots.Add(EquipableType.space2, null);
-        slots.Add(EquipableType.ring1, null);
-        slots.Add(EquipableType.ring2, null);
-        slots.Add(EquipableType.neck, null);
-        #endregion
+
     }
 
-    public UseResult UseItem(IUsable usable, int ID)
+    public UseResult UseBehaviour(int ID)
     {
-        if (usable is IEquipable equipNew)
+        var data = InventoryDataCenter.Get_ItemData_ByID(ID);
+        if (data == null) throw new Exception("No tengo el ID " + ID);
+
+        var usable = InventoryDataCenter.DataBase[ID].Usable;
+        var equipable = InventoryDataCenter.DataBase[ID].Equipable;
+
+#if UNITY_EDITOR
+        //este bloque es para revisar que el que esta diseñando los behaviours no ponga dos behaviours con ID iguales
+        for (int i = 0; i < InventoryDataCenter.DataBase.Length; i++)
         {
-            var type = equipNew.Type;
-
-            if (!slots.ContainsKey(type))
-            {
-                Debug.LogWarning($"ItemUseManager: ranura no registrada: {type}");
-                return UseResult.Fail;
-            }
-
-            if (slots[type] != null)
-            {
-                if (slots[type] == equipNew)
-                {
-                    // Toogle mismo item
-                    slots[type].UnEquip();
-                    slots[type] = null;
-                    
-                }
-                else
-                {
-                    // swap con otro item
-                    slots[type].UnEquip();
-                }
-            }
-
-            slots[type] = equipNew;
-            equipNew.Equip(ID);
-
-            return UseResult.Success;
+            if (i == ID) continue;
+            if (usable != null && InventoryDataCenter.DataBase[i].Usable != null) 
+                if (usable.GetUniqueBehaviourID() != -1 && usable.GetUniqueBehaviourID() == InventoryDataCenter.DataBase[i].Usable.GetUniqueBehaviourID())
+                throw new System.Exception("EXCEPCION EN EDITOR: Fijate que hay dos behaviours que tienen el mismo UniqueBehaviourID");
+            if (equipable != null && InventoryDataCenter.DataBase[i].Equipable != null) 
+                if (equipable.GetUniqueBehaviourID() != -1 && equipable.GetUniqueBehaviourID() == InventoryDataCenter.DataBase[i].Equipable.GetUniqueBehaviourID())
+                throw new System.Exception("EXCEPCION EN EDITOR: Fijate que hay dos behaviours que tienen el mismo UniqueBehaviourID");
         }
-        else 
-        {
-            try
-            {
-                return usable.Use(ID);
-            }
-            catch (System.Exception ex)
-            {
-                return UseResult.Fail;
-            }
-            
-        }
-    }
+#endif
 
-    public UseResult UseBehaviour(int ID, UsabeBehaviour behaviour)
-    {
-        if (!behaviours.ContainsKey(ID))
+        if (usable != null)
         {
-            behaviours.Add(ID, Instantiate(behaviour, this.transform));
+            return useManager.TryUse(usable, ID);
         }
 
-        return UseItem(behaviours[ID], ID);
+        if (equipable != null)
+        {
+            Debug.Log("TryEquip");
+            return equipManager.TryEquip(equipable, ID);
+        }
+
+        Debug.Log("Esta fallando aca");
+        return UseResult.Fail;
     }
 }
 
-public enum EquipableType
-{
-    oneHand = 0,
-    twoHand = 1,
-    head = 2,
-    chest = 3,
-    pants = 4,
-    back = 5,
-    foots = 6,
-    space1 = 7,
-    space2 = 8,
-    ring1 = 9,
-    ring2 = 10,
-    neck = 11
-}
