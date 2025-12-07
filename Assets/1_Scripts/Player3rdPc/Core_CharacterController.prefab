@@ -5207,13 +5207,16 @@ MonoBehaviour:
     ring1: {fileID: 0}
     ring2: {fileID: 0}
     neck: {fileID: 0}
-  itemUseManager:
-    equipManager:
-      parent: {fileID: 2546590293068678033}
-      particle_equip: {fileID: 3591342830836690285}
+  inventoryAgent:
+    isPrincipalAgent: 1
     useManager:
-      parent: {fileID: 7732672841820451721}
-  inventoryAgent: {fileID: 549221761691031078}
+      equipManager:
+        parent: {fileID: 2546590293068678033}
+        particle_equip: {fileID: 3591342830836690285}
+      useManager:
+        parent: {fileID: 7732672841820451721}
+    uiContainer: {fileID: 0}
+    dropRoot: {fileID: 1029357473278600093}
 --- !u!54 &7572308892313622406
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -5930,55 +5933,7 @@ Transform:
   - {fileID: 8102785659489719401}
   - {fileID: 7796905561080899211}
   - {fileID: 7725376648185498807}
-  - {fileID: 6674769693470833058}
   - {fileID: 2546590293068678033}
   - {fileID: 7732672841820451721}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &8260080909393426035
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6674769693470833058}
-  - component: {fileID: 549221761691031078}
-  m_Layer: 0
-  m_Name: Inventory Agent
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &6674769693470833058
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8260080909393426035}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 335292536082800209}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &549221761691031078
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8260080909393426035}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c6e1ae443880a3e4591fd1b6b4f3544d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::InventoryAgent
-  isPrincipalAgent: 1
-  uiContainer: {fileID: 0}
-  root: {fileID: 7796905561080899211}

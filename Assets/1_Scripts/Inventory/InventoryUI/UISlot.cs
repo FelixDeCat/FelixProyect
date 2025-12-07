@@ -9,6 +9,7 @@ public class UISlot : UIBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     int indexInContainer = -1;
     [SerializeField] TextMeshProUGUI txt_quant;
     [SerializeField] Image image;
+    [SerializeField] Image bkg;
     [SerializeField] Action<int> onPointerEnter;
     [SerializeField] Action<int> onPointerExit;
     [SerializeField] Action<int, int> onPointerDown;
@@ -54,6 +55,11 @@ public class UISlot : UIBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     public void SetDebug(string deb)
     {
         debug.text = deb;
+    }
+
+    public void SetEquiped(bool equiped) 
+    {
+        bkg.color = equiped ? Color.cyan : Color.white;
     }
 
     public void SetCallback_PointerEnterExit(Action<int> onEnter, Action<int> onExit)

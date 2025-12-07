@@ -10,10 +10,9 @@ public class ThirdPersonCharacter : MonoBehaviour, IPausable
     [SerializeField] InteractModule         interactModule;
     [SerializeField] ToolSSM                toolFSM;
     [SerializeField] EquipDataManager       equipDataManager;
-    [SerializeField] ItemUseManager         itemUseManager;
+    [SerializeField] InventoryAgent         inventoryAgent;
 
     [Header("Referencias Sueltas")]
-    [SerializeField] InventoryAgent inventoryAgent;
 
     bool isPaused = false;
 
@@ -24,8 +23,8 @@ public class ThirdPersonCharacter : MonoBehaviour, IPausable
         moduleHandler.AddModule(interactModule);
         moduleHandler.AddModule(toolFSM);
         moduleHandler.AddModule(equipDataManager);
+        moduleHandler.AddModule(inventoryAgent);
 
-        inventoryAgent.SetItemUsageManager(itemUseManager);
         characterController.IsGroundedCallback(groundModule.IsGrounded);
         interactModule.SetMousePointModule(mousePoint);
     }

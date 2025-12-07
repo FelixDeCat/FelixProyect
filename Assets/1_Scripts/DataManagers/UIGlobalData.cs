@@ -14,8 +14,8 @@ public class UIGlobalData : MonoSingleton<UIGlobalData>
     [SerializeField] UIContainer uiContainer_chest;
     public static UISlot model_ui_slots { get { return Instance.uislots; } }
     public static TextMeshProUGUI Txt_InteractInfo { get { return Instance.txt_interactInfo; } }
-    public static UIContainer UIContainer_PlayerInventory;
-    public static UIContainer UIContainer_Chest;
+    public static UIContainer UIContainer_PlayerInventory { get { return Instance.uiContainer_playerInventory; } }
+    public static UIContainer UIContainer_Chest { get { return Instance.uiContainer_chest; } }
 
     public override void SingletonAwake()
     {

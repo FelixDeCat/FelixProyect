@@ -1,15 +1,20 @@
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class EquipSlotHandler
 {
-
     Transform parent;
     EquipableBehaviourBase current_behaviour;
+    Action<string> AddGUID;
+    Action<string> RemGUID;
 
-    public EquipSlotHandler(Transform _parent)
+    public EquipSlotHandler(Transform _parent, Action<string> _onAddGUID, Action<string> _onRemGUID)
     {
+        AddGUID = _onAddGUID;
+        RemGUID = _onRemGUID;
+
         current_behaviour = null;
         this.parent = _parent;
     }
@@ -42,6 +47,7 @@ public class EquipSlotHandler
             {
 
                 current_behaviour.UnEquip();
+                RemGUID.Invoke(current_behaviour.GetSlotData().GUID);
                 if (current_behaviour.gameObject != null)
                 {
                     CustomConsole.Log("Desequipando... " + current_behaviour.GetSlotData().index_id);
@@ -62,6 +68,7 @@ public class EquipSlotHandler
         current_behaviour = newCurrent;
         current_behaviour.gameObject.SetActive(true);
         current_behaviour.Equip(slot);
+        AddGUID(slot.GUID);
     }
 
     public UseResult UnEquipCurrent()
@@ -70,6 +77,8 @@ public class EquipSlotHandler
             return UseResult.Fail;
 
         current_behaviour.UnEquip();
+
+        RemGUID.Invoke(current_behaviour.GetSlotData().GUID);
 
         if (current_behaviour.gameObject != null)
             GameObject.Destroy(current_behaviour.gameObject);
@@ -85,6 +94,10 @@ public class EquipSlotHandler
         var b = slot.GetEquipSlot();
 
         return a.index_id == b.index_id && a.parameters == b.parameters && a.GUID == b.GUID;
+    }
+    public string GetGUID()
+    {
+        return current_behaviour.GetSlotData().GUID;
     }
     public bool Ocuppied()
     {

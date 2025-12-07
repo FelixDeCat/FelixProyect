@@ -1,49 +1,44 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InventoryAgent : MonoBehaviour
+[System.Serializable]
+public class InventoryAgent: IStarteable, IUpdateable
 {
     public static InventoryAgent InstanceAgent;
-
     [SerializeField] bool isPrincipalAgent = false;
-
     // ejemplo de inventario
-    public Container container; 
+    public Container container;
+    
+    [SerializeField] ItemUseManager useManager;
+
+    [Header("Front End")]
     [SerializeField] UIContainer uiContainer;
 
-    [SerializeField] Transform root;
-
-    ItemUseManager usage;
+    [Header("Drop Position")]
+    [SerializeField] Transform dropRoot;
 
     Vector3 spawnPos
     {
         get
         {
-            return root.position + root.forward * 5 + root.up;
+            return dropRoot.position + dropRoot.forward * 5 + dropRoot.up;
         }
     }
 
-    private void Awake()
+    void IStarteable.Start()
     {
         if (isPrincipalAgent)
         {
             InstanceAgent = this;
+            uiContainer = UIGlobalData.UIContainer_PlayerInventory;
+            container = new Container(15);
+            uiContainer.Intialize(container, OnPointerEnter, OnPointerExit, OnPointerDown, OnPointerUp);
+            uiContainer.AddCallback_GetGUIDs(useManager.GuidEquiped);
         }
     }
-    void Start()
-    {
-        container = new Container(15);
-        uiContainer.Intialize(container, OnPointerEnter, OnPointerExit, OnPointerDown, OnPointerUp);
-    }
 
-    public void SetItemUsageManager(ItemUseManager itemUseManager)
+    void IUpdateable.Tick(float delta)
     {
-        usage = itemUseManager;
-    }
-
-    private void Update()
-    {
-
         if (Input.GetKeyDown(KeyCode.H))
         {
             var item = InventoryDataCenter.RandomItem.ItemID;
@@ -70,6 +65,11 @@ public class InventoryAgent : MonoBehaviour
         uiContainer.Refresh(container);
 
         return result;
+    }
+
+    public void Refresh()
+    {
+        uiContainer.Refresh(container);
     }
 
 
@@ -125,11 +125,9 @@ public class InventoryAgent : MonoBehaviour
         }
         else if (_pointerID == -2)
         {
-            // usar item
-
             if (slot == null) throw new System.Exception("El slot es nulo");
 
-            var result = usage.UseBehaviour(slot);
+            var result = useManager.UseBehaviour(slot);
 
             switch (result)
             {
@@ -175,17 +173,9 @@ public class InventoryAgent : MonoBehaviour
 
         if (currentIndex == _indexInContainer)// press en el mismo lugar
         {
-            if (_pointerID == -1)
-            {
-
-            }
-            else if (_pointerID == -2)
-            {
-
-            }
-            else if (_pointerID == -3)
-            {
-            }
+            if (_pointerID == -1) { }
+            else if (_pointerID == -2) { }
+            else if (_pointerID == -3) { }
         }
         else
         {
@@ -205,4 +195,6 @@ public class InventoryAgent : MonoBehaviour
             }
         }
     }
+
+    
 }

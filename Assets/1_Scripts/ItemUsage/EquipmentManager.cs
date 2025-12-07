@@ -11,6 +11,12 @@ public class EquipmentManager
 
     [SerializeField] ParticleSystem particle_equip;
 
+    HashSet<string> guids = new HashSet<string>();
+
+    public bool IsGUIDEquiped(string _guid)
+    {
+        return guids.Contains(_guid);
+    }
 
     // Equipable Behaviour Base == Objeto instanciado en Game
     // Equip Slot Handler == Maneja los slots que estan equipados
@@ -21,7 +27,12 @@ public class EquipmentManager
         if (!equip.TryGetValue(equipable_type, out EquipSlotHandler info))
         {
             Debug.LogWarning($"ItemUseManager: ranura no registrada: {equipable_type}");
-            info = new EquipSlotHandler(_parent: parent);
+            info = new EquipSlotHandler(
+                _parent: parent,
+                _onAddGUID: guid => guids.Add(guid),
+                _onRemGUID: guid => guids.Remove(guid)
+                );
+
             equip[equipable_type] = info;
         }
 
@@ -34,12 +45,12 @@ public class EquipmentManager
             }
             else
             {
-
                 info.UnEquipCurrent();
             }
         }
+
         var result = info.Equip(current, slot);
-        if (result == UseResult.Success)
+        if (result == UseResult.Success && particle_equip != null)
         {
             particle_equip.Stop();
             particle_equip.transform.position = EquipDataManager.Instance.GetPosition(equipable_type);

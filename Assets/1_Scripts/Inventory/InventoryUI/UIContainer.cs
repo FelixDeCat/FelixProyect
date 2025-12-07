@@ -16,6 +16,11 @@ public class UIContainer : MonoBehaviour
     [SerializeField] RectTransform parent;
     List<UISlot> slots;
 
+    public bool canDrawEquipables;
+
+    Func<string, bool> isGUIDEquiped = delegate { return false; };
+    public void AddCallback_GetGUIDs(Func<string,bool> _isGuidEquiped) => isGUIDEquiped = _isGuidEquiped;
+
     public void Intialize(Container container, Action<int> onEnter, Action<int> onExit, Action<int,int> onDown, Action<int, int> onUp)
     {
         slots = new List<UISlot>(container.MaxCapacity);
@@ -52,6 +57,12 @@ public class UIContainer : MonoBehaviour
                 slots[i].Set_Image(InventoryDataCenter.Get_Data_ByID(container[i].IndexID).Image);
                 slots[i].Set_Quantity(container[i].Quantity);
                 slots[i].SetDebug(container[i].GUID);
+            }
+
+            if (canDrawEquipables)
+            {
+                string guid = container[i].GetEquipSlot().GUID;
+                slots[i].SetEquiped(isGUIDEquiped.Invoke(guid));
             }
         }
     }

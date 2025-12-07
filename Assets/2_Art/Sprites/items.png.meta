@@ -126,10 +126,10 @@ TextureImporter:
       name: item_rock
       rect:
         serializedVersion: 2
-        x: 0
-        y: 683
-        width: 341
-        height: 341
+        x: 55
+        y: 735
+        width: 251
+        height: 227
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -148,10 +148,10 @@ TextureImporter:
       name: item_wood
       rect:
         serializedVersion: 2
-        x: 341
-        y: 683
-        width: 341
-        height: 341
+        x: 370
+        y: 714
+        width: 275
+        height: 242
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -170,10 +170,10 @@ TextureImporter:
       name: item_mushroom
       rect:
         serializedVersion: 2
-        x: 682
-        y: 683
-        width: 341
-        height: 341
+        x: 727
+        y: 713
+        width: 246
+        height: 255
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -192,10 +192,10 @@ TextureImporter:
       name: item_bayas
       rect:
         serializedVersion: 2
-        x: 0
-        y: 342
-        width: 341
-        height: 341
+        x: 75
+        y: 394
+        width: 238
+        height: 233
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -214,10 +214,10 @@ TextureImporter:
       name: item_grass
       rect:
         serializedVersion: 2
-        x: 341
-        y: 342
-        width: 341
-        height: 341
+        x: 383
+        y: 375
+        width: 259
+        height: 271
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -236,10 +236,10 @@ TextureImporter:
       name: item_carrot
       rect:
         serializedVersion: 2
-        x: 682
-        y: 342
-        width: 341
-        height: 341
+        x: 728
+        y: 372
+        width: 255
+        height: 278
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -258,10 +258,10 @@ TextureImporter:
       name: item_meat
       rect:
         serializedVersion: 2
-        x: 0
-        y: 1
-        width: 341
-        height: 341
+        x: 45
+        y: 44
+        width: 276
+        height: 255
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -280,10 +280,10 @@ TextureImporter:
       name: item_gold
       rect:
         serializedVersion: 2
-        x: 352
-        y: 1
-        width: 329
-        height: 341
+        x: 402
+        y: 61
+        width: 233
+        height: 232
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -302,10 +302,10 @@ TextureImporter:
       name: item_pickaxe
       rect:
         serializedVersion: 2
-        x: 682
-        y: 1
-        width: 341
-        height: 341
+        x: 716
+        y: 30
+        width: 267
+        height: 278
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}

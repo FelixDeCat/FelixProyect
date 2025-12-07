@@ -45,12 +45,18 @@ public class ItemUseManager
 
         if (equipable != null)
         {
-            Debug.Log("TryEquip");
             return equipManager.TryEquip(equipable, slot);
         }
 
-        Debug.Log("Esta fallando aca");
+        CustomConsole.Log($"Item: {data.name} no tiene equipable ni consumible");
         return UseResult.Fail;
     }
+
+    public bool GuidEquiped(string GUID)
+    {
+        return equipManager.IsGUIDEquiped(GUID);
+    }
+
+    
 }
 
