@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Item_101_Bow
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   item_name: bow
+  item_ID: 101
   description: 
   maxStack: 1
   image: {fileID: -44674587, guid: adb79ca5173742642a2ea3b496fe6aea, type: 3}

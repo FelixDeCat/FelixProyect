@@ -13,7 +13,11 @@ MonoBehaviour:
   m_Name: Item_201_Wood
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   item_name: wood
+  item_ID: 201
   description: 
   maxStack: 5
   image: {fileID: 1070932909, guid: a25451e143407414aa1f8a383b987074, type: 3}
   model: {fileID: 8933933225621124848, guid: f5a7f05d26cf0c047b049642326d996f, type: 3}
+  usable: {fileID: 0}
+  equipable: {fileID: 0}
+  parameters: []

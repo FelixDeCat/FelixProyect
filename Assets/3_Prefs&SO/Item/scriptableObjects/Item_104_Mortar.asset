@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Item_104_Mortar
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   item_name: mortar
+  item_ID: 104
   description: 
   maxStack: 1
   image: {fileID: 949329028, guid: adb79ca5173742642a2ea3b496fe6aea, type: 3}

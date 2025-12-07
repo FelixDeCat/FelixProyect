@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Item_303_Eggs
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   item_name: eggs
+  item_ID: 303
   description: 
   maxStack: 10
   image: {fileID: 1165493836, guid: adb79ca5173742642a2ea3b496fe6aea, type: 3}

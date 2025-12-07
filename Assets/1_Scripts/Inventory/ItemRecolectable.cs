@@ -5,11 +5,14 @@ using UnityEngine;
 public class ItemRecolectable : MonoBehaviour
 {
     public int indexID = 0;
+    public string GUID = "";
     
     [SerializeField] Interactable interactable;
 
     int maxStack = 1;
     [SerializeField] int currQ = 0;
+
+    [SerializeField] string parameters = string.Empty;
 
     [SerializeField] bool debugQuantity;
     [SerializeField] TextMeshPro debText;
@@ -28,31 +31,33 @@ public class ItemRecolectable : MonoBehaviour
     {
         if (placeHolder)
         {
-            spriteRenderer.sprite = InventoryDataCenter.DB[indexID].Image;
+            spriteRenderer.sprite = InventoryDataCenter.Get_Data_ByID(indexID).Image;
         }
     }
 
-    public int ActivateItemRecolectable(int _indexElement, int newQ = 1)
+    public int ActivateItemRecolectable(int _indexElement, int newQ = 1, string customGUID = "")
     {
-        debText.gameObject.SetActive(true);
+        if(debText) debText.gameObject.SetActive(true);
 
         int remain = newQ;
         indexID = _indexElement;
-        maxStack = InventoryDataCenter.DB[indexID].MaxStack;
+        maxStack = InventoryDataCenter.Get_Data_ByID(indexID).MaxStack;
+
+        GUID = customGUID;
 
         if (newQ + currQ >= maxStack)
         {
             remain = (newQ + currQ) - maxStack;
             currQ = maxStack;
 
-            debText.text = currQ.ToString() + " R: " + remain;
+            if (debText) debText.text = currQ.ToString() + " R: " + remain;
             return remain;
         }
 
         currQ = currQ + newQ;
         remain = 0;
 
-        debText.text = currQ.ToString() + " R: " + remain;
+        if (debText) debText.text = currQ.ToString() + " R: " + remain;
         return remain;
     }
     public void ApplyForce(Vector3 origin)
@@ -69,7 +74,7 @@ public class ItemRecolectable : MonoBehaviour
     void OnRecolect()
     {
 
-        int remain = InventoryAgent.InstanceAgent.TryAddElement(indexID, currQ);
+        int remain = InventoryAgent.InstanceAgent.TryAddElement(indexID, currQ, parameters, GUID);
         if (remain == currQ) return; //sonido no se puede agregar
 
         if (remain > 0)
@@ -80,14 +85,14 @@ public class ItemRecolectable : MonoBehaviour
                 Tools.Random_XZ_PosInBound(
                     center: this.transform.position,
                     radius: 2f),
-                remain);
+                remain, GUID);
         }
 
         ItemSpawner.ReturnItem(indexID, this);
     }
     string OnGetInfo()
     {
-        return InventoryDataCenter.DB[indexID].Name;
+        return InventoryDataCenter.Get_Data_ByID(indexID).Name;
     }
 
 

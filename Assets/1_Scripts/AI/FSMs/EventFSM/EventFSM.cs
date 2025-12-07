@@ -29,7 +29,7 @@ namespace AI.Tools
             if (started) return;
             started = true;
             current.Enter();
-            debug?.Invoke($"FIRST current:{current.ToString()}");
+            debug?.Invoke($"FIRST current_behaviour:{current.ToString()}");
         }
 
         public void AddTransition(IState from, T input, IState to)

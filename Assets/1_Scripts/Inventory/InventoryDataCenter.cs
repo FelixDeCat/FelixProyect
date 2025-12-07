@@ -3,36 +3,42 @@ using UnityEngine;
 
 public class InventoryDataCenter : MonoSingleton<InventoryDataCenter>
 {
-    [SerializeField] ItemData[] dataBase;
-    Item[] items;
+    [SerializeField] ItemData[] _dataBase;
 
-    public static Item[] DB
+    Dictionary<int, ItemData> dataBase = new Dictionary<int, ItemData>();
+    Dictionary<int, Item> items = new Dictionary<int, Item>();
+    public override void SingletonAwake()
     {
-        get
+        for (int i = 0; i < _dataBase.Length; i++)
         {
-            if (Instance.items == null) throw new System.Exception("Base de Datos no Inicializada");
-            return Instance.items;
+            items.Add(_dataBase[i].ItemID, new Item(
+                _dataBase[i].Name,
+                _dataBase[i].Description,
+                _dataBase[i].MaxStack,
+                _dataBase[i].Image));
+
+            dataBase.Add(_dataBase[i].ItemID, _dataBase[i]);
         }
     }
-    public static Item Get_Valid_Item_ByID(int ID, bool debug = true)
+    public static Item Get_Item_ByID(int ID, bool debug = true)
     {
-        if (ID >= Instance.items.Length || ID < 0) 
+        if (!Instance.items.ContainsKey(ID)) 
         {
-            if(debug) CustomConsole.LogError($"Intentando obtener Item con ID fuera de Rango -> <color=yellow>ID: {ID}</color>");
+            if(debug) CustomConsole.LogError($"No tengo -> <color=yellow>ID: {ID}</color>");
             return null;
         }
         return Instance.items[ID];
     }
-    public static ItemData Get_ItemData_ByID(int ID)
+    public static ItemData Get_Data_ByID(int ID)
     {
-        if (ID >= Instance.items.Length || ID < 0) 
+        if (!Instance.dataBase.ContainsKey(ID)) 
         {
-            CustomConsole.LogError($"Intentando obtener ItemData con ID fuera de Rango -> <color=yellow>ID: {ID}</color>");
+            CustomConsole.LogError($"No tengo  -> <color=yellow>ID: {ID}</color>");
             return null;
         }
         return Instance.dataBase[ID];
     }
-    public static ItemData[] DataBase
+    public static Dictionary<int, ItemData> AllData
     {
         get
         {
@@ -40,20 +46,23 @@ public class InventoryDataCenter : MonoSingleton<InventoryDataCenter>
         }
     }
 
-    public override void SingletonAwake()
+    public static int Length
     {
-        
-
-        items = new Item[dataBase.Length];
-        for (int i = 0; i < dataBase.Length; i++)
+        get
         {
-            items[i] = new Item(
-                dataBase[i].Name, 
-                dataBase[i].Description, 
-                dataBase[i].MaxStack,
-                dataBase[i].Image);
+            return Instance._dataBase.Length;
         }
     }
+
+    public static ItemData RandomItem
+    {
+        get
+        {
+            return Instance._dataBase[Random.Range(0, Instance._dataBase.Length)];
+        }
+    }
+
+
 
 }
 

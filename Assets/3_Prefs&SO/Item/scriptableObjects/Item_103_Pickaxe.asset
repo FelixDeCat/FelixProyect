@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Item_103_Pickaxe
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   item_name: pickaxe
+  item_ID: 103
   description: 
   maxStack: 1
   image: {fileID: 333850086, guid: a25451e143407414aa1f8a383b987074, type: 3}

@@ -1,14 +1,14 @@
 using UnityEngine;
 
-public class EquipableBase : EquipableBehaviour
+public class EquipableBase : EquipableBehaviourBase
 {
     [SerializeField] GameObject current;
     string currentName;
 
     Transform currentParent;
-    protected async override void OnEquip(int ID)
+    protected async override void OnEquip(EquipSlot slot)
     {
-        var item = InventoryDataCenter.Get_ItemData_ByID(ID);
+        var item = InventoryDataCenter.Get_Data_ByID(slot.index_id);
         if (item == null) throw new System.Exception("Item no se encuentra");
 
         currentName = item.Name;

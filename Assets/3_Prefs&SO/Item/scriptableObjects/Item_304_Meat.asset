@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Item_304_Meat
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   item_name: meat
+  item_ID: 304
   description: 
   maxStack: 10
   image: {fileID: -639530837, guid: a25451e143407414aa1f8a383b987074, type: 3}

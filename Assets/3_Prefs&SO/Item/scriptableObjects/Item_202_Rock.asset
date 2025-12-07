@@ -13,7 +13,11 @@ MonoBehaviour:
   m_Name: Item_202_Rock
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   item_name: rock
+  item_ID: 202
   description: 
   maxStack: 50
   image: {fileID: 1935780775, guid: a25451e143407414aa1f8a383b987074, type: 3}
   model: {fileID: 8933933225621124848, guid: f8e9bf3bfebeb4b4cb1b639dffda103d, type: 3}
+  usable: {fileID: 0}
+  equipable: {fileID: 0}
+  parameters: []

@@ -19,7 +19,6 @@ public class ThirdPersonCharacter : MonoBehaviour, IPausable
 
     private void Awake()
     {
-        moduleHandler.AddModule(mousePoint);
         moduleHandler.AddModule(characterController);
         moduleHandler.AddModule(groundModule);
         moduleHandler.AddModule(interactModule);
@@ -27,8 +26,8 @@ public class ThirdPersonCharacter : MonoBehaviour, IPausable
         moduleHandler.AddModule(equipDataManager);
 
         inventoryAgent.SetItemUsageManager(itemUseManager);
-
         characterController.IsGroundedCallback(groundModule.IsGrounded);
+        interactModule.SetMousePointModule(mousePoint);
     }
     private void Start()
     {
@@ -59,7 +58,7 @@ public class ThirdPersonCharacter : MonoBehaviour, IPausable
 
     private void OnDrawGizmos()
     {
-        mousePoint.OnDrawGizmos();
+        //*mousePoint.OnDrawGizmos();
     }
 
     void IPausable.Pause()

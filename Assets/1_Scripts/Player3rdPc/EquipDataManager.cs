@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 [System.Serializable]
@@ -11,6 +12,27 @@ public class EquipDataManager : IStarteable
             Instance = this;
         }
     }
+
+    internal Vector3 GetPosition(EquipableType equipable_type)
+    {
+        switch (equipable_type)
+        {
+            case EquipableType.oneHand: return rightHand.position;
+            case EquipableType.twoHand: return rightHand.position;
+            case EquipableType.head: return head.position;
+            case EquipableType.chest: return chest.position;
+            case EquipableType.pants: return pants.position;
+            case EquipableType.back: return back.position;
+            case EquipableType.foots: return foots.position;
+            case EquipableType.space1: return space1.position;
+            case EquipableType.space2: return space2.position;
+            case EquipableType.ring1: return ring1.position;
+            case EquipableType.ring2: return ring2.position;
+            case EquipableType.neck: return neck.position;
+        }
+        return Vector3.zero;
+    }
+
     [SerializeField] Transform leftHand;
     [SerializeField] Transform rightHand;
     [SerializeField] Transform head;

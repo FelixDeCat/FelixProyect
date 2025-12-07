@@ -3,25 +3,42 @@ using UnityEngine.WSA;
 
 // Item individual por inventario, por entidad, serializable para guardar partida
 
+public class EquipSlot
+{
+    public int index_id;
+    public string parameters;
+    public string GUID;
+}
 public class Slot
 {
     [SerializeField] int index_id;
     [SerializeField] int quantity;
-    [SerializeField] int[] qualitystates; // puede tener varios estados a la vez
+    [SerializeField] string parameters; // puede tener varios estados a la vez
+    [SerializeField] string guid;
 
 
-    public Slot(int index_id, int quantity, int[] qualitystates)
+    public Slot(int index_id, int quantity, string parameters = "")
     {
         this.index_id = index_id;
         this.quantity = quantity;
-        this.qualitystates = qualitystates;
+        this.parameters = parameters;
+        this.guid = string.Empty;
+    }
+
+    public EquipSlot GetEquipSlot()
+    {
+        EquipSlot equip = new EquipSlot();
+        equip.index_id = index_id;
+        equip.parameters = parameters;
+        equip.GUID = guid;
+        return equip;
     }
 
     public void EmptyStack()
     {
         index_id = -1;
         quantity = 0;
-        qualitystates = null;
+        parameters = string.Empty;
     }
     public int IndexID { get { return index_id; } }
     public int Quantity { 
@@ -30,16 +47,17 @@ public class Slot
             return quantity; 
         }
     }
-    public int[] QualityStates { get { return qualitystates; } }
+    public string Parameters { get { return parameters; } }
 
-    public void Set(int index, int quantity, params int[] qualityStates)
+    public string GUID { get { return guid; } }
+
+    public void Set(int index, int quantity, string parameters, string GUID = "")
     {
         this.index_id = index;
         this.quantity = quantity;
-        this.qualitystates = qualityStates;
+        this.parameters = parameters;
+        this.guid = GUID;
     }
-
-    
 
     public int AddQuantity(int toAdd)
     {
@@ -48,7 +66,7 @@ public class Slot
         if (index_id == -1)
             throw new System.InvalidOperationException("Primero modificar el Indice antes de agregar al inventario.");
 
-        Item item = InventoryDataCenter.Get_Valid_Item_ByID(index_id);
+        Item item = InventoryDataCenter.Get_Item_ByID(index_id);
         if (item == null) throw new System.Exception("Item Invalido");
 
         int espacioDisponible = item.MaxStack - quantity;
@@ -69,10 +87,10 @@ public class Slot
         if (ID < 0)
             throw new System.ArgumentOutOfRangeException(nameof(ID), "El ID no puede ser negativo.");
 
-        // slot vacío: simular que se puede crear una nueva pila del item consultado
+        // currentSlot vacío: simular que se puede crear una nueva pila del item consultado
         if (index_id == -1)
         {
-            Item item = InventoryDataCenter.Get_Valid_Item_ByID(ID);
+            Item item = InventoryDataCenter.Get_Item_ByID(ID);
             if (item == null) return _quant;
 
             int available = item.MaxStack; // espacio total en una pila nueva
@@ -84,12 +102,12 @@ public class Slot
             return _quant - quantToAdd;
         }
 
-        // slot con otro item: no aporta espacio para este ID
+        // currentSlot con otro item: no aporta espacio para este ID
         if (index_id != ID)
             return _quant;
 
-        // slot con el mismo ID: calcular espacio restante en la pila existente
-        Item existingItem = InventoryDataCenter.Get_Valid_Item_ByID(index_id);
+        // currentSlot con el mismo ID: calcular espacio restante en la pila existente
+        Item existingItem = InventoryDataCenter.Get_Item_ByID(index_id);
         if (existingItem == null)
             return _quant;
 

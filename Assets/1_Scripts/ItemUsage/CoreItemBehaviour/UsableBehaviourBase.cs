@@ -5,7 +5,7 @@ public enum UseResult
     Fail,
     Consume
 }
-public abstract class UsableBehaviour : ItemBehaviour
+public abstract class UsableBehaviourBase : ItemBehaviour
 {
     public UseResult Use(int ID)
     {

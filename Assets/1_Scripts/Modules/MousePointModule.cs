@@ -1,40 +1,34 @@
 using UnityEngine;
 
 [System.Serializable]
-public class MousePointModule: IUpdateable, IPausable, IActivable
+public class MousePointModule
 {
-    [SerializeField] LayerMask mask;
     Ray ray;
     RaycastHit hit;
-    [SerializeField] GameObject feedbackPointer;
 
-    bool active = false;
-    void IActivable.Active() { active = true; }
-
-    void IActivable.Deactivate() { active = false; }
-
-    void IPausable.Pause() { }
-
-    void IPausable.Resume() { }
-
-    void IUpdateable.Tick(float delta)
+    Vector3 center;
+    public Collider QueryAtScreenCenter(LayerMask mask, float maxDistance, QueryTriggerInteraction interaction)
     {
-        if (!active) return;
-        if (Input.GetMouseButtonDown(0) && feedbackPointer != null)
+        Vector3 center = new Vector3(Screen.width * 0.5f, Screen.height * 0.5f, 0f);
+        Ray ray = Camera.main.ScreenPointToRay(center);
+
+        if (Physics.Raycast(ray, out hit, maxDistance, mask, interaction))
         {
-            ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out hit, float.MaxValue, mask, QueryTriggerInteraction.Ignore))
-            {
-                feedbackPointer.transform.position = hit.point;
-            }
+            UIGlobalData.Txt_InteractInfo.text = hit.collider.gameObject.name;
+            return hit.collider;
         }
+        
+        return null;
     }
 
-    public void OnDrawGizmos()
+    public Collider QueryAtMouse(LayerMask mask, float maxDistance, QueryTriggerInteraction interaction)
     {
-        if (!active) return;
         ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        Gizmos.color = Color.red;
-        Gizmos.DrawLine(ray.origin, ray.origin + ray.direction * 10);
+        if (Physics.Raycast(ray, out hit, maxDistance, mask, interaction))
+        {
+            UIGlobalData.Txt_InteractInfo.text = hit.collider.gameObject.name;
+            return hit.collider;
+        }
+        return null;
     }
 }

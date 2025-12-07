@@ -13,6 +13,11 @@ MonoBehaviour:
   m_Name: Item_200_Gold
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   item_name: gold
+  item_ID: 200
   description: 
   maxStack: 999
   image: {fileID: 606642147, guid: a25451e143407414aa1f8a383b987074, type: 3}
+  model: {fileID: 7582837762504148139, guid: 753ac2658e05a234dbb45bfc86c9318a, type: 3}
+  usable: {fileID: 0}
+  equipable: {fileID: 0}
+  parameters: []

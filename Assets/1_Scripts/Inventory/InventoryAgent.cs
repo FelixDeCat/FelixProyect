@@ -32,7 +32,7 @@ public class InventoryAgent : MonoBehaviour
     }
     void Start()
     {
-        container = new Container(18);
+        container = new Container(15);
         uiContainer.Intialize(container, OnPointerEnter, OnPointerExit, OnPointerDown, OnPointerUp);
     }
 
@@ -46,37 +46,19 @@ public class InventoryAgent : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.H))
         {
-            ItemSpawner.SpawnItem(Random.Range(0,InventoryDataCenter.DB.Length),
-                Tools.Random_XZ_PosInBound(
-                    center: spawnPos,
-                    radius: 2f));
-        }
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            ItemSpawner.SpawnItem(4, 
-                Tools.Random_XZ_PosInBound(
-                    center: spawnPos,
-                    radius: 2f));
-        }
-        if (Input.GetKeyDown(KeyCode.Y))
-        {
-            ItemSpawner.SpawnItem(6, 
-                Tools.Random_XZ_PosInBound(
-                    center: spawnPos,
-                    radius: 2f));
-        }
-        if (Input.GetKeyDown(KeyCode.U))
-        {
-            ItemSpawner.SpawnItem(7, 
+            var item = InventoryDataCenter.RandomItem.ItemID;
+            Debug.Log(item);
+
+            ItemSpawner.SpawnItem(item,
                 Tools.Random_XZ_PosInBound(
                     center: spawnPos,
                     radius: 2f));
         }
     }
 
-    public int TryAddElement(int index_ID, int quantity, params int[] states)
+    public int TryAddElement(int index_ID, int quantity, string parameters, string GUID = "")
     {
-        container.TryAdd(index_ID, quantity, out int remain);
+        container.TryAdd(index_ID, quantity, out int remain, parameters, GUID);
         uiContainer.Refresh(container);
         return remain;
     }
@@ -93,7 +75,7 @@ public class InventoryAgent : MonoBehaviour
 
     public void OnPointerEnter(int _indexInContainer)
     {
-        Debug.Log(_indexInContainer);
+       // Debug.Log(_indexInContainer);
         var slot = container[_indexInContainer];
         if (slot.IndexID == -1)
         {
@@ -101,8 +83,8 @@ public class InventoryAgent : MonoBehaviour
             CustomConsole.LogStaticText(2, "MaxStack: empty");
             return;
         }
-        CustomConsole.LogStaticText(1, $"Item: {InventoryDataCenter.DB[slot.IndexID].Name.FiveChar()}", color: Color.yellow);
-        CustomConsole.LogStaticText(2, $"MaxStack: {InventoryDataCenter.DB[slot.IndexID].MaxStack.ToString()}", color: Color.yellow);
+        CustomConsole.LogStaticText(1, $"Item: {InventoryDataCenter.Get_Data_ByID(slot.IndexID).Name.FiveChar()}", color: Color.yellow);
+        CustomConsole.LogStaticText(2, $"MaxStack: {InventoryDataCenter.Get_Data_ByID(slot.IndexID).MaxStack.ToString()}", color: Color.yellow);
     }
     public void OnPointerExit(int _indexInContainer)
     {
@@ -121,7 +103,7 @@ public class InventoryAgent : MonoBehaviour
         var slot = container[_indexInContainer];
         currentIndex = _indexInContainer;
 
-        var item = InventoryDataCenter.Get_Valid_Item_ByID(slot.IndexID, debug: false);
+        var item = InventoryDataCenter.Get_Item_ByID(slot.IndexID, debug: false);
         if (item == null)
         {
             return;
@@ -145,16 +127,16 @@ public class InventoryAgent : MonoBehaviour
         {
             // usar item
 
-            int ID = container[_indexInContainer].IndexID;
+            if (slot == null) throw new System.Exception("El slot es nulo");
 
-            var result = usage.UseBehaviour(ID);
+            var result = usage.UseBehaviour(slot);
 
             switch (result)
             {
                 case UseResult.Success:
                     break;
                 case UseResult.Fail:
-                    CustomConsole.Log("Fallo al usar ID: " + ID);
+                    CustomConsole.Log("Fallo al usar ID: " + slot.IndexID);
                     break;
                 case UseResult.Consume:
                     container.RemoveQuantityFromPosition(_indexInContainer, 1);
@@ -178,11 +160,11 @@ public class InventoryAgent : MonoBehaviour
             }
             if (quant > 0 && dropID != -1)
             {
-                ItemSpawner.SpawnItem(dropID, spawnPos, quant);
+                var slotEquip = container[_indexInContainer].GetEquipSlot();
+
+                ItemSpawner.SpawnItem(dropID, spawnPos, quant, slotEquip.GUID);
             }
-
         }
-
 
         uiContainer.Refresh(container);
 
@@ -212,7 +194,7 @@ public class InventoryAgent : MonoBehaviour
 
         if (_pointerID == -3)
         {
-            var item = InventoryDataCenter.Get_Valid_Item_ByID(slot.IndexID, debug: false);
+            var item = InventoryDataCenter.Get_Item_ByID(slot.IndexID, debug: false);
             if (item != null)
             {
                 CustomConsole.LogStaticText(3, $"Down::{_pointerID}::{item.Name.FiveChar()}", Color.green);

@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Item_102_Axe
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   item_name: axe
+  item_ID: 102
   description: 
   maxStack: 1
   image: {fileID: 432159845, guid: 45a868d793892514fb880c87f41f4b91, type: 3}

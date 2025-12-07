@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Item_307_Potato
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   item_name: potato
+  item_ID: 307
   description: 
   maxStack: 20
   image: {fileID: 329068097, guid: adb79ca5173742642a2ea3b496fe6aea, type: 3}

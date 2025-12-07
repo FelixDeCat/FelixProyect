@@ -49,8 +49,9 @@ public class UIContainer : MonoBehaviour
             }
             else
             {
-                slots[i].Set_Image(InventoryDataCenter.DB[container[i].IndexID].Image);
+                slots[i].Set_Image(InventoryDataCenter.Get_Data_ByID(container[i].IndexID).Image);
                 slots[i].Set_Quantity(container[i].Quantity);
+                slots[i].SetDebug(container[i].GUID);
             }
         }
     }

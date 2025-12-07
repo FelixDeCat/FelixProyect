@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
@@ -20,15 +21,12 @@ public class ItemSpawner : MonoSingleton<ItemSpawner>
         sucessfull = new ResultMsg(true, "Sucess!!");
     }
 
-    public static ResultMsg SpawnItem(int indexID, Vector3 position, int quantity = 1) => Instance._spawnItem(indexID, position, quantity);
-    ResultMsg _spawnItem(int indexID, Vector3 position, int quant = 1)
+    public static ResultMsg SpawnItem(int indexID, Vector3 position, int quantity = 1, string customGUID = "") => Instance._spawnItem(indexID, position, quantity, customGUID);
+    ResultMsg _spawnItem(int indexID, Vector3 position, int quant = 1, string customGUID = "")
     {
-        if (indexID >= InventoryDataCenter.DataBase.Length)
-            return indexOutOfRangeException;
-
         if (indexID == -1) return minusOne;
 
-        var current = InventoryDataCenter.DataBase[indexID].Model;
+        var current = InventoryDataCenter.Get_Data_ByID(indexID).Model;
 
         if (current == null)
             return doesNotHaveModel;
@@ -38,29 +36,50 @@ public class ItemSpawner : MonoSingleton<ItemSpawner>
             CreatePool(indexID, current);
         }
 
-        int steps = 0;
-        while (quant > 0)
+        if (InventoryDataCenter.Get_Data_ByID(indexID).Equipable != null)
         {
-            if(steps++ > MAX_STEPS)
+            var go = pools[indexID].Get();
+
+            if (customGUID != "")
             {
-                var ex = new System.Exception($"ItemSpawner: abortando spawn porque se superó el máximo de iteraciones ({MAX_STEPS}) para _i {indexID}");
-                throw ex;
+                go.ActivateItemRecolectable(indexID, 1, customGUID);
+            }
+            else
+            {
+                go.ActivateItemRecolectable(indexID, 1, Guid.NewGuid().ToString());
             }
 
-            var go = pools[indexID].Get();
-            int prev = quant;
-            quant = go.ActivateItemRecolectable(indexID, quant);
             go.transform.position = position;
 
-            if (quant == prev)
-            {
-                var ex = new System.Exception("ActiveItemRecolectable no redujo la cantidad de objetos");
-                _returnItem(indexID, go);
-                throw ex;
-            }
-        }
 
-        return sucessfull;
+            return sucessfull;
+        }
+        else
+        {
+            int steps = 0;
+            while (quant > 0)
+            {
+                if (steps++ > MAX_STEPS)
+                {
+                    var ex = new System.Exception($"ItemSpawner: abortando spawn porque se superó el máximo de iteraciones ({MAX_STEPS}) para _i {indexID}");
+                    throw ex;
+                }
+
+                var go = pools[indexID].Get();
+                int prev = quant;
+                quant = go.ActivateItemRecolectable(indexID, quant);
+                go.transform.position = position;
+
+                if (quant == prev)
+                {
+                    var ex = new System.Exception("ActiveItemRecolectable no redujo la cantidad de objetos");
+                    _returnItem(indexID, go);
+                    throw ex;
+                }
+            }
+
+            return sucessfull;
+        }   
     }
 
     public static void ReturnItem(int key, ItemRecolectable item) => Instance._returnItem(key, item);
@@ -68,6 +87,11 @@ public class ItemSpawner : MonoSingleton<ItemSpawner>
     {
         if (pools.ContainsKey(key))
         {
+            pools[key].Release(item);
+        }
+        else
+        {
+            CreatePool(key, item);
             pools[key].Release(item);
         }
     }
@@ -80,7 +104,9 @@ public class ItemSpawner : MonoSingleton<ItemSpawner>
             createFunc: () =>
             {
                 var go = GameObject.Instantiate(model);
+
                 go.transform.SetParent(this.transform);
+                go.name = "p" + go.name;
                 return go;
             },
             actionOnGet: item =>
@@ -91,6 +117,7 @@ public class ItemSpawner : MonoSingleton<ItemSpawner>
             actionOnRelease: item =>
             {
                 item.ResetItemRecolectable();
+                item.transform.SetParent(this.transform);
                 item.gameObject.SetActive(false);
             },
             actionOnDestroy: item => Destroy(item.gameObject),

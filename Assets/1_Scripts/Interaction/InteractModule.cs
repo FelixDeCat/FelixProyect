@@ -12,22 +12,32 @@ public class InteractModule: IStarteable, IPausable, IUpdateable, IActivable
     RaycastHit info;
     [SerializeField] float maxDistance = 3f;
 
+    MousePointModule mousePointModule;
+    public void SetMousePointModule(MousePointModule mousePointModule)
+    {
+        this.mousePointModule = mousePointModule;
+    }
+
     void IStarteable.Start()
     {
-        center = new Vector3(Screen.width / 2, Screen.height / 2, 0f);
+        //center = new Vector3(Screen.width / 2, Screen.height / 2, 0f);
     }
 
     Interactable interactable = null;
 
     void IUpdateable.Tick(float delta)
     {
-        if (!active) return; 
+        if (!active) return;
 
-        ray = Camera.main.ScreenPointToRay(center);
+        Debug.Log("active");
 
-        if (Physics.Raycast(ray, out info, maxDistance, interactables))
+        Collider col = mousePointModule.QueryAtScreenCenter(interactables, maxDistance, QueryTriggerInteraction.Collide);
+
+        if (col != null)
         {
-            interactable = info.transform.GetComponent<Interactable>();
+            UIGlobalData.Txt_InteractInfo.text = col.name;
+
+            interactable = col.GetComponent<Interactable>();
             if (interactable != null)
             {
                 if (Input.GetButtonDown("Interact"))

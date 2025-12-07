@@ -9,37 +9,44 @@ public class ItemUseManager
     [SerializeField] EquipmentManager equipManager;
     [SerializeField] UsableManager useManager;
 
-    public UseResult UseBehaviour(int ID)
+    public UseResult UseBehaviour(Slot slot)
     {
-        var data = InventoryDataCenter.Get_ItemData_ByID(ID);
-        if (data == null) throw new Exception("No tengo el ID " + ID);
+        var data = InventoryDataCenter.Get_Data_ByID(slot.IndexID);
+        if (data == null) throw new Exception("No tengo el ID " + slot.IndexID);
 
-        var usable = InventoryDataCenter.DataBase[ID].Usable;
-        var equipable = InventoryDataCenter.DataBase[ID].Equipable;
+        var usable = data.Usable;
+        var equipable = data.Equipable;
 
 #if UNITY_EDITOR
+
         //este bloque es para revisar que el que esta diseñando los behaviours no ponga dos behaviours con ID iguales
-        for (int i = 0; i < InventoryDataCenter.DataBase.Length; i++)
+        foreach (var kvp in InventoryDataCenter.AllData) 
         {
-            if (i == ID) continue;
-            if (usable != null && InventoryDataCenter.DataBase[i].Usable != null) 
-                if (usable.GetUniqueBehaviourID() != -1 && usable.GetUniqueBehaviourID() == InventoryDataCenter.DataBase[i].Usable.GetUniqueBehaviourID())
-                throw new System.Exception("EXCEPCION EN EDITOR: Fijate que hay dos behaviours que tienen el mismo UniqueBehaviourID");
-            if (equipable != null && InventoryDataCenter.DataBase[i].Equipable != null) 
-                if (equipable.GetUniqueBehaviourID() != -1 && equipable.GetUniqueBehaviourID() == InventoryDataCenter.DataBase[i].Equipable.GetUniqueBehaviourID())
-                throw new System.Exception("EXCEPCION EN EDITOR: Fijate que hay dos behaviours que tienen el mismo UniqueBehaviourID");
+            var currentData = kvp.Value;
+            if (currentData.ItemID == slot.IndexID) continue;
+
+            if (usable != null && currentData.Usable != null)
+            {
+                if (usable.GetUniqueBehaviourID() != -1 && usable.GetUniqueBehaviourID() == currentData.Usable.GetUniqueBehaviourID())
+                    throw new System.Exception("EXCEPCION EN EDITOR: Fijate que hay dos behaviours que tienen el mismo UniqueBehaviourID");
+            }
+            if (equipable != null && currentData.Equipable != null)
+            {
+                if (equipable.GetUniqueBehaviourID() != -1 && equipable.GetUniqueBehaviourID() == currentData.Equipable.GetUniqueBehaviourID())
+                    throw new System.Exception("EXCEPCION EN EDITOR: Fijate que hay dos behaviours que tienen el mismo UniqueBehaviourID");
+            }
         }
 #endif
 
         if (usable != null)
         {
-            return useManager.TryUse(usable, ID);
+            return useManager.TryUse(usable, slot);
         }
 
         if (equipable != null)
         {
             Debug.Log("TryEquip");
-            return equipManager.TryEquip(equipable, ID);
+            return equipManager.TryEquip(equipable, slot);
         }
 
         Debug.Log("Esta fallando aca");

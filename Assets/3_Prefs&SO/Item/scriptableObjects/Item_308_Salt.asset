@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Item_308_Salt
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   item_name: salt
+  item_ID: 308
   description: 
   maxStack: 100
   image: {fileID: 1359317765, guid: adb79ca5173742642a2ea3b496fe6aea, type: 3}

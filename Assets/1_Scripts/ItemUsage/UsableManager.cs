@@ -6,9 +6,9 @@ using UnityEngine.EventSystems;
 public class UsableManager
 {
     [SerializeField] Transform parent;
-    Dictionary<int, UsableBehaviour> usables = new Dictionary<int, UsableBehaviour>();
+    Dictionary<int, UsableBehaviourBase> usables = new Dictionary<int, UsableBehaviourBase>();
 
-    public UseResult TryUse(UsableBehaviour usable, int ID)
+    public UseResult TryUse(UsableBehaviourBase usable, Slot slot)
     {
         int KEY = usable.GetUniqueBehaviourID();
         if (KEY < 0)
@@ -21,6 +21,6 @@ public class UsableManager
             usables.Add(KEY, GameObject.Instantiate(usable, parent));
         }
 
-        return usable.Use(ID);
+        return usable.Use(slot.IndexID);
     }
 }

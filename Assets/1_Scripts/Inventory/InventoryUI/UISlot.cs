@@ -14,6 +14,8 @@ public class UISlot : UIBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     [SerializeField] Action<int, int> onPointerDown;
     [SerializeField] Action<int, int> onPointerUp;
 
+    [SerializeField] TextMeshProUGUI debug;
+
     Color color_transp = new Color(0,0,0,0);
 
     public void Set_ContainerIndex(int index)
@@ -46,6 +48,12 @@ public class UISlot : UIBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         image.sprite = null;
         image.color = color_transp;
         txt_quant.text = string.Empty;
+        debug.text = string.Empty;
+    }
+
+    public void SetDebug(string deb)
+    {
+        debug.text = deb;
     }
 
     public void SetCallback_PointerEnterExit(Action<int> onEnter, Action<int> onExit)

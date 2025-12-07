@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Item_302_Chicken
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   item_name: chicken
+  item_ID: 302
   description: 
   maxStack: 20
   image: {fileID: 1713830001, guid: adb79ca5173742642a2ea3b496fe6aea, type: 3}
