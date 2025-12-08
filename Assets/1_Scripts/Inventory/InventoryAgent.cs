@@ -6,7 +6,7 @@ public class InventoryAgent: IStarteable, IUpdateable
 {
     public static InventoryAgent InstanceAgent;
     [SerializeField] bool isPrincipalAgent = false;
-    // ejemplo de inventario
+    
     public Container container;
     
     [SerializeField] ItemUseManager useManager;
@@ -17,13 +17,7 @@ public class InventoryAgent: IStarteable, IUpdateable
     [Header("Drop Position")]
     [SerializeField] Transform dropRoot;
 
-    Vector3 spawnPos
-    {
-        get
-        {
-            return dropRoot.position + dropRoot.forward * 5 + dropRoot.up;
-        }
-    }
+    Vector3 spawnOffsetPos { get => dropRoot.position + dropRoot.forward * 5 + dropRoot.up; }
 
     void IStarteable.Start()
     {
@@ -39,17 +33,8 @@ public class InventoryAgent: IStarteable, IUpdateable
 
     void IUpdateable.Tick(float delta)
     {
-        if (Input.GetKeyDown(KeyCode.H))
-        {
-            var item = InventoryDataCenter.RandomItem.ItemID;
-            Debug.Log(item);
-
-            ItemSpawner.SpawnItem(item,
-                Tools.Random_XZ_PosInBound(
-                    center: spawnPos,
-                    radius: 2f));
-        }
     }
+
 
     public int TryAddElement(int index_ID, int quantity, string parameters, string GUID = "")
     {
@@ -75,21 +60,25 @@ public class InventoryAgent: IStarteable, IUpdateable
 
     public void OnPointerEnter(int _indexInContainer)
     {
-       // Debug.Log(_indexInContainer);
-        var slot = container[_indexInContainer];
-        if (slot.IndexID == -1)
-        {
-            CustomConsole.LogStaticText(1, "Item: empty");
-            CustomConsole.LogStaticText(2, "MaxStack: empty");
-            return;
-        }
-        CustomConsole.LogStaticText(1, $"Item: {InventoryDataCenter.Get_Data_ByID(slot.IndexID).Name.FiveChar()}", color: Color.yellow);
-        CustomConsole.LogStaticText(2, $"MaxStack: {InventoryDataCenter.Get_Data_ByID(slot.IndexID).MaxStack.ToString()}", color: Color.yellow);
+        // Debug.Log(_indexInContainer);
+        //var slot = container[_indexInContainer];
+        //if (slot.IndexID == -1)
+        //{
+        //    CustomConsole.LogStaticText(1, "Item: empty");
+        //    CustomConsole.LogStaticText(2, "MaxStack: empty");
+        //    return;
+        //}
+        //CustomConsole.LogStaticText(1, $"Item: {InventoryDataCenter.Get_Data_ByID(slot.IndexID).Name.FiveChar()}", color: Color.yellow);
+        //CustomConsole.LogStaticText(2, $"MaxStack: {InventoryDataCenter.Get_Data_ByID(slot.IndexID).MaxStack.ToString()}", color: Color.yellow);
+
+        if(container[_indexInContainer].IndexID != -1)
+            ItemFullInspector.Inspect(container[_indexInContainer]);
     }
     public void OnPointerExit(int _indexInContainer)
     {
-        CustomConsole.LogStaticText(1, "Item:", Color.gray);
-        CustomConsole.LogStaticText(2, "MaxStack:", Color.gray);
+        //CustomConsole.LogStaticText(1, "Item:", Color.gray);
+        //CustomConsole.LogStaticText(2, "MaxStack:", Color.gray);
+        ItemFullInspector.StopInspect();
     }
     int currentIndex = -1;
     public void OnPointerDown(int _indexInContainer, int _pointerID)
@@ -107,7 +96,6 @@ public class InventoryAgent: IStarteable, IUpdateable
         if (item == null)
         {
             return;
-            
         }
 
         CustomConsole.LogStaticText(3, $"Down::{_pointerID}::{item.Name.FiveChar()}", Color.green);
@@ -146,21 +134,30 @@ public class InventoryAgent: IStarteable, IUpdateable
         }
         else if (_pointerID == -3)
         {
-            int quant = 0;
-            int dropID = container[_indexInContainer].IndexID;
-            if (Input.GetKey(KeyCode.LeftShift))
+            if (string.IsNullOrEmpty(slot.GUID))
             {
-                quant = RemoveElement(_indexInContainer, 1);
+                int quant = 0;
+                int dropID = container[_indexInContainer].IndexID;
+                if (Input.GetKey(KeyCode.LeftShift))
+                {
+                    quant = RemoveElement(_indexInContainer, 1);
+                }
+                else
+                {
+                    quant = RemoveElement(_indexInContainer, container[_indexInContainer].Quantity);
+                }
+                if (quant > 0 && dropID != -1)
+                {
+                    useManager.ForceDesequip(slot);
+                    ItemSpawner.SpawnItem(dropID, spawnOffsetPos, quant, slot.GUID);
+                }
             }
             else
             {
-                quant = RemoveElement(_indexInContainer, container[_indexInContainer].Quantity);
-            }
-            if (quant > 0 && dropID != -1)
-            {
-                var slotEquip = container[_indexInContainer].GetEquipSlot();
-
-                ItemSpawner.SpawnItem(dropID, spawnPos, quant, slotEquip.GUID);
+                int dropID = slot.IndexID;
+                useManager.ForceDesequip(slot);
+                RemoveElement(_indexInContainer, 1);
+                ItemSpawner.SpawnItem(dropID, spawnOffsetPos, 1, slot.GUID);
             }
         }
 

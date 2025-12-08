@@ -9,6 +9,18 @@ public class ItemUseManager
     [SerializeField] EquipmentManager equipManager;
     [SerializeField] UsableManager useManager;
 
+    public UseResult ForceDesequip(Slot slot)
+    {
+        var data = InventoryDataCenter.Get_Data_ByID(slot.IndexID);
+        if (data.Equipable != null)
+        {
+            return equipManager.ForceDesequip(data.Equipable.Type, slot);
+        }
+        else return UseResult.Fail;
+
+            
+    }
+
     public UseResult UseBehaviour(Slot slot)
     {
         var data = InventoryDataCenter.Get_Data_ByID(slot.IndexID);

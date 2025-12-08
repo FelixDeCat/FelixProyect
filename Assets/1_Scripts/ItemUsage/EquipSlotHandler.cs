@@ -95,6 +95,14 @@ public class EquipSlotHandler
 
         return a.index_id == b.index_id && a.parameters == b.parameters && a.GUID == b.GUID;
     }
+    public bool SameItem(EquipSlot slot)
+    {
+        var a = current_behaviour.GetSlotData();
+        var b = slot;
+
+        return a.index_id == b.index_id && a.parameters == b.parameters && a.GUID == b.GUID;
+    }
+
     public string GetGUID()
     {
         return current_behaviour.GetSlotData().GUID;

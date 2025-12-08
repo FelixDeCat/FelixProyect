@@ -23,7 +23,16 @@ public class ItemData : ScriptableObject
     public ItemRecolectable Model { get { return model; } }
     public UsableBehaviourBase Usable { get { return usable; } }
     public EquipableBehaviourBase Equipable { get { return equipable; } }
-    public string[] Parameters { get { return parameters; } }
+    public string Parameters { get 
+        {
+            string res = String.Empty;
+            for (int i = 0; i < parameters.Length; i++)
+            {
+                res += "["+parameters[i]+"]";
+            }
+            return res;
+        } 
+    }
 
 }
 

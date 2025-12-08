@@ -11,6 +11,10 @@ public class ItemSpawner : MonoSingleton<ItemSpawner>
     ResultMsg sucessfull;
     Dictionary<int, ObjectPool<ItemRecolectable>> pools = new Dictionary<int, ObjectPool<ItemRecolectable>>();
 
+    [SerializeField] Transform player_drop_root;
+
+    Vector3 spawnOffsetPos { get => player_drop_root.position + player_drop_root.forward * 5 + player_drop_root.up; }
+
     const int MAX_STEPS = 1000;
 
     public override void SingletonAwake()
@@ -20,6 +24,14 @@ public class ItemSpawner : MonoSingleton<ItemSpawner>
         doesNotHaveModel = new ResultMsg(false, "Item does not have an model");
         sucessfull = new ResultMsg(true, "Sucess!!");
     }
+    public static ResultMsg SpawnItemInFronOfPlayer(int indexID, int quantity = 1, string customGUID = "") =>
+        Instance._spawnItem
+        (
+            indexID: indexID,
+            position: Tools.Random_XZ_PosInBound(center: Instance.spawnOffsetPos, radius: 2f),
+            quant: quantity,
+            customGUID: customGUID
+        );
 
     public static ResultMsg SpawnItem(int indexID, Vector3 position, int quantity = 1, string customGUID = "") => Instance._spawnItem(indexID, position, quantity, customGUID);
     ResultMsg _spawnItem(int indexID, Vector3 position, int quant = 1, string customGUID = "")
@@ -79,7 +91,7 @@ public class ItemSpawner : MonoSingleton<ItemSpawner>
             }
 
             return sucessfull;
-        }   
+        }
     }
 
     public static void ReturnItem(int key, ItemRecolectable item) => Instance._returnItem(key, item);

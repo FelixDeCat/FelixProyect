@@ -58,4 +58,20 @@ public class EquipmentManager
         }
         return result;
     }
+
+
+    public UseResult ForceDesequip(EquipableType type, Slot slot)
+    {
+        if (!equip.ContainsKey(type)) return UseResult.Fail;
+        var info = equip[type];
+        if (info.Ocuppied())
+        {
+            if (info.SameItem(slot))
+            {
+                info.UnEquipCurrent();
+                return UseResult.Success;
+            }
+        }
+        return UseResult.Fail;
+    }
 }
