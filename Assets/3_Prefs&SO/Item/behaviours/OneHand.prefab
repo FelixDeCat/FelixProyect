@@ -44,4 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f64c27dfed3cfb48a79c58188be418f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EquipableBase
-  type: 0
+  unique_behaviour_ID: -1
+  Type: 0
+  hasVisuals: 1
+  current: {fileID: 0}

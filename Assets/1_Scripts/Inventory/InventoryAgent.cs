@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class InventoryAgent: IStarteable, IUpdateable
+public class InventoryAgent: IStarteable
 {
     public static InventoryAgent InstanceAgent;
     [SerializeField] bool isPrincipalAgent = false;
@@ -31,10 +31,6 @@ public class InventoryAgent: IStarteable, IUpdateable
         }
     }
 
-    void IUpdateable.Tick(float delta)
-    {
-    }
-
 
     public int TryAddElement(int index_ID, int quantity, string parameters, string GUID = "")
     {
@@ -58,6 +54,7 @@ public class InventoryAgent: IStarteable, IUpdateable
     }
 
 
+    #region HOVER
     public void OnPointerEnter(int _indexInContainer)
     {
         // Debug.Log(_indexInContainer);
@@ -80,9 +77,18 @@ public class InventoryAgent: IStarteable, IUpdateable
         //CustomConsole.LogStaticText(2, "MaxStack:", Color.gray);
         ItemFullInspector.StopInspect();
     }
+    #endregion
+
     int currentIndex = -1;
-    public void OnPointerDown(int _indexInContainer, int _pointerID)
+
+    bool awaiting = false;
+    public async void OnPointerDown(int _indexInContainer, int _pointerID)
     {
+        if (awaiting) 
+        { 
+            CustomConsole.LogError("El metodo esta en espera, no se puede usar"); 
+            return; 
+        }
         if (_indexInContainer < 0 || _indexInContainer >= container.MaxCapacity)
         {
             CustomConsole.LogError($"Me esta llegando mal el indice mi capacidad " +
@@ -113,27 +119,23 @@ public class InventoryAgent: IStarteable, IUpdateable
         }
         else if (_pointerID == -2)
         {
+            #region Click Derecho / USAR / EQUIPAR
             if (slot == null) throw new System.Exception("El slot es nulo");
-
-            var result = useManager.UseBehaviour(slot);
-
+            awaiting = true;
+            var result = await useManager.UseBehaviour(slot);
+            awaiting = false;
             switch (result)
             {
-                case UseResult.Success:
-                    break;
-                case UseResult.Fail:
-                    CustomConsole.Log("Fallo al usar ID: " + slot.IndexID);
-                    break;
-                case UseResult.Consume:
-                    container.RemoveQuantityFromPosition(_indexInContainer, 1);
-                    break;
-                default:
-                    break;
+                case UseResult.Success: break;
+                case UseResult.Fail: CustomConsole.Log("Fallo al usar ID: " + slot.IndexID); break;
+                case UseResult.Consume: container.RemoveQuantityFromPosition(_indexInContainer, 1); break;
+                default: break;
             }
-
+            #endregion
         }
         else if (_pointerID == -3)
         {
+            #region Click Rueda Centrar / DROP
             if (string.IsNullOrEmpty(slot.GUID))
             {
                 int quant = 0;
@@ -158,6 +160,7 @@ public class InventoryAgent: IStarteable, IUpdateable
                 RemoveElement(_indexInContainer, 1);
                 ItemSpawner.SpawnItem(dropID, spawnOffsetPos, 1, slot.GUID);
             }
+            #endregion
         }
 
         uiContainer.Refresh(container);

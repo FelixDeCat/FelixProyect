@@ -46,4 +46,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EquipableBase
   unique_behaviour_ID: -1
   Type: 1
+  hasVisuals: 1
   current: {fileID: 0}

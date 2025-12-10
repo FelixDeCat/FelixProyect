@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -21,7 +22,7 @@ public class ItemUseManager
             
     }
 
-    public UseResult UseBehaviour(Slot slot)
+    public async Task<UseResult> UseBehaviour(Slot slot)
     {
         var data = InventoryDataCenter.Get_Data_ByID(slot.IndexID);
         if (data == null) throw new Exception("No tengo el ID " + slot.IndexID);
@@ -57,6 +58,16 @@ public class ItemUseManager
 
         if (equipable != null)
         {
+            if (equipable.HasVisuals)
+            {
+                var res = await InstanceResourceManager.PreLoad("Equipables", data.Name);
+                if (!res)
+                {
+                    CustomConsole.LogError("Se esta intentando cargar un Equipable que tiene visual, pero no se encuentra como Asset");
+                    return UseResult.Fail;
+                }
+            }
+
             return equipManager.TryEquip(equipable, slot);
         }
 
