@@ -29,8 +29,6 @@ public class InteractModule: IStarteable, IPausable, IUpdateable, IActivable
     {
         if (!active) return;
 
-        Debug.Log("active");
-
         Collider col = mousePointModule.QueryAtScreenCenter(interactables, maxDistance, QueryTriggerInteraction.Collide);
 
         if (col != null)

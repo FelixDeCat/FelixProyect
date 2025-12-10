@@ -10,21 +10,29 @@ public class DebTool_ActionButtons : MonoBehaviour
 
     private void Awake()
     {
-        pool = new ObjectPool<ui_debugger_button> (   
-            createFunc: () => 
-            {
-                var b = Instantiate(model, transform);
-                b.gameObject.SetActive(false);
-                return b;
-            },
-            actionOnGet: b => b.gameObject.SetActive(true),
-            actionOnRelease: b => 
-            {
-                b.PoolRelease();
-                b.gameObject.SetActive(false);
-            },
-            actionOnDestroy: b =>  Destroy(b.gameObject)  
-            );
+        if (pool == null)
+        {
+            LoadPool();
+        }
+    }
+
+    public void LoadPool()
+    {
+        pool = new ObjectPool<ui_debugger_button>(
+           createFunc: () =>
+           {
+               var b = Instantiate(model, transform);
+               b.gameObject.SetActive(false);
+               return b;
+           },
+           actionOnGet: b => b.gameObject.SetActive(true),
+           actionOnRelease: b =>
+           {
+               b.PoolRelease();
+               b.gameObject.SetActive(false);
+           },
+           actionOnDestroy: b => Destroy(b.gameObject)
+           );
     }
 
     public void AddActions(List<Tuple<string,Action>> actions)
@@ -38,6 +46,7 @@ public class DebTool_ActionButtons : MonoBehaviour
     }
     public void AddAction(string name, Action action)
     {
+        if (pool == null) LoadPool();
         pool.Get().Set(name, action);
     }
     public void ReleaseAll()

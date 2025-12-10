@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.Progress;
 
 public class InventoryDataCenter : MonoSingleton<InventoryDataCenter>
 {
@@ -13,8 +12,6 @@ public class InventoryDataCenter : MonoSingleton<InventoryDataCenter>
 
     public override void SingletonAwake()
     {
-
-
         for (int i = 0; i < _dataBase.Length; i++)
         {
             items.Add(_dataBase[i].ItemID, new Item(
@@ -92,12 +89,4 @@ public class InventoryDataCenter : MonoSingleton<InventoryDataCenter>
             return Instance._dataBase[Random.Range(0, Instance._dataBase.Length)];
         }
     }
-
-
-
 }
-
-
-
-
-

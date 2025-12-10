@@ -148,7 +148,6 @@ public class InventoryAgent: IStarteable, IUpdateable
                 }
                 if (quant > 0 && dropID != -1)
                 {
-                    useManager.ForceDesequip(slot);
                     ItemSpawner.SpawnItem(dropID, spawnOffsetPos, quant, slot.GUID);
                 }
             }
