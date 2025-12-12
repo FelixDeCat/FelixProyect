@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8386786287931783237}
   - component: {fileID: -5713048060431848705}
   m_Layer: 0
-  m_Name: SimpleBurstParticleDestroyed
+  m_Name: SimpleBurst_HitRockDestroy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -1,92 +1,66 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Pool;
 
 public class ParticlePool : MonoSingleton<ParticlePool>
 {
+    const string PARTICLES_PATH = "Particles";
+
+    GenericObjectLoadAndPool<ParticleSystem> loader;
     public override void SingletonAwake()
     {
-
+        loader = new GenericObjectLoadAndPool<ParticleSystem>
+        (
+            onCreate: (obj, original_name) =>
+            {
+                obj.transform.SetParent(this.transform);
+                var listener = obj.GetComponent<ParticleStopListener>();
+                if (listener != null)
+                {
+                    Debug.Log("Inicializando");
+                    listener.Initialize(() => Despawn(original_name,obj));
+                }
+            },
+            onGet: obj =>
+            {
+                //nothing
+            },
+            onRelease: obj =>
+            {
+                Debug.Log("Releseado");
+                obj.transform.SetParent(this.transform);
+            }
+        );
     }
 
-    readonly Dictionary<string, ObjectPool<ParticleSystem>> pools = new Dictionary<string, ObjectPool<ParticleSystem>>();
-
-    public void PreLoad(string key, ParticleSystem prefab, int defaultCapacity = 5)
+    public bool PreLoadParticle(ParticleSystem prefab, int defaultCapacity = 5)
     {
-        if (!pools.TryGetValue(key, out var pool))
-        {
-            pool = CreatePool(key, prefab);
-            pools[key] = pool;
-        }
+        return loader.Preload(prefab, defaultCapacity);
     }
-    public ParticleSystem Spawn(string key, ParticleSystem prefab, Vector3 pos)
+    public async Task<bool> PreLoadParticleFromResource(string particle_name_in_resource, int defaultCapacity = 5)
     {
-        if (!pools.TryGetValue(key, out var pool))
-        {
-            pool = CreatePool(key, prefab);
-            pools[key] = pool;
-        }
-
-        var particle = pool.Get();
+        return await loader.Preload(PARTICLES_PATH, particle_name_in_resource, defaultCapacity);
+    }
+    public ParticleSystem Spawn(string key_name, Vector3 pos)
+    {
+        var particle = loader.Get(key_name);
         particle.transform.position = pos;
         particle.Play();
         return particle;
     }
 
-    
-
-    public ParticleSystem SpawnAndParent(string key, ParticleSystem prefab, Transform parent)
+    public ParticleSystem Spawn(string key_name, Transform parent)
     {
-        if (!pools.TryGetValue(key, out var pool))
-        {
-            pool = CreatePool(key, prefab);
-            pools[key] = pool;
-        }
-
-        var particle = pool.Get();
+        var particle = loader.Get(key_name);
         particle.transform.SetParent(parent);
         particle.transform.position = parent.position;
         particle.Play();
         return particle;
     }
 
-    public void Despawn(string key, ParticleSystem ps)
+    public void Despawn(string name_key, ParticleSystem ps)
     {
-        if (pools.TryGetValue(key, out var pool))
-            pool.Release(ps);
+        loader.Release(name_key, ps);
     }
-
-
-    ObjectPool<ParticleSystem> CreatePool(string key, ParticleSystem prefab)
-    {
-        var pool = new ObjectPool<ParticleSystem>(
-                createFunc: () =>
-                {
-                    var obj = ParticleSystem.Instantiate(prefab);
-                    obj.transform.SetParent(this.transform);
-                    var listener = obj.GetComponent<ParticleStopListener>();
-                    if (listener != null)
-                    {
-                        Debug.Log("Inicializando");
-                        listener.Initialize(() => Despawn(key, obj));
-                    }
-                    return obj;
-                },
-                actionOnGet: ps =>
-                {
-                    ps.gameObject.SetActive(true);
-
-                },
-                actionOnRelease: ps =>
-                {
-                    ps.gameObject.SetActive(false);
-                    ps.transform.SetParent(this.transform);
-                },
-                actionOnDestroy: ps => ParticleSystem.Destroy(ps.gameObject),
-                defaultCapacity: 5
-            );
-
-        return pool;
-    }
-
 }
