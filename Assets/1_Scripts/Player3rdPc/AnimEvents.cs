@@ -8,8 +8,22 @@ public class AnimEvents : MonoBehaviour
 
     public void SubscribeToEvent(string event_key, Action action)
     {
-        if (events.ContainsKey(event_key)) throw new System.Exception("No puedo recibir dos eventos con el mismo parametro");
-        events.Add(event_key, action);
+        if (!events.ContainsKey(event_key))
+        {
+            events.Add(event_key, action);
+        }
+        else
+        {
+            events[event_key] = action;
+        }  
+    }
+
+    public void CleanInKey(string event_key)
+    {
+        if (events.ContainsKey(event_key))
+        {
+            events[event_key] = delegate { };
+        }
     }
 
     public void ANIM_EVENT(string key)

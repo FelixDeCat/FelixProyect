@@ -2,8 +2,9 @@ using UnityEngine;
 using AI.Tools;
 
 [System.Serializable]
-public class WeaponState : StateBase, IPausable
+public class BuildMode_State : StateBase
 {
+
     public override void OnEnter()
     {
         
@@ -16,16 +17,7 @@ public class WeaponState : StateBase, IPausable
 
     public override void OnUpdate()
     {
-        
-    }
-
-    void IPausable.Pause()
-    {
-        
-    }
-
-    void IPausable.Resume()
-    {
-       
+        // Using State
+        // Build Menu State
     }
 }

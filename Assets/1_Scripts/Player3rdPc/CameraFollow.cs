@@ -11,7 +11,8 @@ public class CameraFollow : MonoSingleton<CameraFollow>
     {
         none,
         thirdPersonCam,
-        debug45
+        debug45, 
+        lookAtPlayer
     }
     public CameraMode mode = CameraMode.thirdPersonCam;
 
@@ -20,6 +21,8 @@ public class CameraFollow : MonoSingleton<CameraFollow>
     [SerializeField] float maxPitch = 60;
 
     [SerializeField] Transform target;
+
+    [SerializeField] Transform lookAtPlayer;
 
     [SerializeField] float distance = 5;
     [SerializeField] float height = 2;
@@ -137,6 +140,13 @@ public class CameraFollow : MonoSingleton<CameraFollow>
             Cursor.lockState = CursorLockMode.None;
             transform.position = target.position + offsetDeb;
             transform.LookAt(target);
+        }
+        else if (mode == CameraMode.lookAtPlayer)
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+            transform.position = lookAtPlayer.transform.position;
+            transform.eulerAngles = lookAtPlayer.eulerAngles;
         }
     }
 

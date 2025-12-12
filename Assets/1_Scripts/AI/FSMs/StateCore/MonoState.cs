@@ -16,5 +16,7 @@ namespace AI.Tools
         protected virtual void OnEnter() { }
         protected virtual void OnExit() { }
         protected virtual void OnUpdate() { }
+
+        
     }
 }

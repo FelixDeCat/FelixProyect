@@ -1,8 +1,12 @@
+using UnityEngine;
+
 namespace AI.Tools
 {
     public class SSM
     {
         IState current;
+
+        IFixedUpdateable physicUpdate;
 
         public SSM(IState first)
         {
@@ -21,6 +25,7 @@ namespace AI.Tools
             current.Exit();
             current = next;
             current.Enter();
+            physicUpdate = current as IFixedUpdateable;
             return true;
         }
         public void UpdateFSM()
@@ -28,6 +33,14 @@ namespace AI.Tools
             if (current != null)
             {
                 current.Update();
+            }
+        }
+
+        public void FixedUpdateFSM()
+        {
+            if (physicUpdate != null)
+            {
+                physicUpdate.FixedTick(Time.fixedDeltaTime);
             }
         }
     }

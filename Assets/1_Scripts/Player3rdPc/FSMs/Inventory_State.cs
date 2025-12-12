@@ -1,6 +1,6 @@
 using UnityEngine;
 using AI.Tools;
-public class InventoryState : StateBase, IPausable
+public class Inventory_State : StateBase
 {
     public override void OnEnter()
     {
@@ -15,15 +15,5 @@ public class InventoryState : StateBase, IPausable
     public override void OnUpdate()
     {
         
-    }
-
-    void IPausable.Pause()
-    {
-        
-    }
-
-    void IPausable.Resume()
-    {
-       
     }
 }
