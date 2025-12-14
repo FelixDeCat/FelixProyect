@@ -21,6 +21,7 @@ public class ThirdPersonCharacter : MonoBehaviour, IPausable
     [Header("Referencias Sueltas")]
 
     bool isPaused = false;
+    bool isActive = false;
 
     /// brain
     SSM ssm;
@@ -68,30 +69,36 @@ public class ThirdPersonCharacter : MonoBehaviour, IPausable
     }
     public void Activate()
     {
+        isActive = true;
         moduleHandler.Activate();
     }
     public void Deactivate()
     {
+        isActive = false;
         moduleHandler.Deactivate();
     }
+
     void ResetModules()
     {
         moduleHandler.Reset();
     }
     void Update()
     {
+        if (!isActive) return;
         if (isPaused) return;
         moduleHandler.Tick(Time.deltaTime);
         ssm.UpdateFSM();
     }
     private void FixedUpdate()
     {
+        if(!isActive) return;
         if (isPaused) return;
         moduleHandler.FixedTick(Time.deltaTime);
     }
 
     private void OnDrawGizmos()
     {
+        if (!isActive) return;
         //mousePoint.OnDrawGizmos();
         dmgSensor.DrawGizmosManually();
     }

@@ -80,6 +80,8 @@ public class CharControl_State : StateBase, IStarteable, IFixedUpdateable
         {
             rb.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
         }
+
+        view.Animate_Motion_Basic(input.magnitude);
     }
 
     Vector3 result = Vector3.zero;

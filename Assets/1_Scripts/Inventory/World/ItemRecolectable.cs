@@ -81,11 +81,18 @@ public class ItemRecolectable : MonoBehaviour
         {
             CustomConsole.Log($"Se intentó agregar {currQ.ToString().Paint(Color.yellow)}, pero sobró {remain.ToString().Paint(Color.red)}");
 
-            ItemSpawner.SpawnItem(indexID,
-                Tools.Random_XZ_PosInBound(
+            ItemSpawner.SpawnItem
+            (
+                indexID: indexID,
+                position: Tools.Random_XZ_PosInBound
+                (
                     center: this.transform.position,
-                    radius: 2f),
-                remain, GUID);
+                    radius: 2f
+                ),
+                quantity: remain,
+                group: true,
+                customGUID: GUID
+            );
         }
 
         ItemSpawner.ReturnItem(indexID, this);

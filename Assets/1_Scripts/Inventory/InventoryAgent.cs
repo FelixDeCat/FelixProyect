@@ -150,7 +150,7 @@ public class InventoryAgent: IStarteable
                 }
                 if (quant > 0 && dropID != -1)
                 {
-                    ItemSpawner.SpawnItem(dropID, spawnOffsetPos, quant, slot.GUID);
+                    ItemSpawner.SpawnItem(dropID, spawnOffsetPos, quant, true, slot.GUID);
                 }
             }
             else
@@ -158,7 +158,7 @@ public class InventoryAgent: IStarteable
                 int dropID = slot.IndexID;
                 useManager.ForceDesequip(slot);
                 RemoveElement(_indexInContainer, 1);
-                ItemSpawner.SpawnItem(dropID, spawnOffsetPos, 1, slot.GUID);
+                ItemSpawner.SpawnItem(dropID, spawnOffsetPos, 1, true, slot.GUID);
             }
             #endregion
         }

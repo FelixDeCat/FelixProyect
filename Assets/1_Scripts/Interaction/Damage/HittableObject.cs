@@ -4,6 +4,7 @@ public abstract class HittableObject : MonoBehaviour, IDamageable
 {
     LifeComponent life;
 
+    [Header("HittableObject")]
     [SerializeField] int maxLife;
 
     void Awake()

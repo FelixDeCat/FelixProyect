@@ -162,3 +162,7 @@ MonoBehaviour:
   item_to_spawn: 202
   minQuant: 2
   maxQuant: 4
+  shakeComponent:
+    root: {fileID: 1408433097176481020}
+    intensity: 0.1
+    duration: 0.1

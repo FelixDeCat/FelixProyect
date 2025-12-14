@@ -25,10 +25,8 @@ public class GameController : MonoBehaviour
         (
             _enter: () =>
             {
-                
                 CameraFollow.Instance.ChangeMode(CameraFollow.CameraMode.thirdPersonCam);
-                
-                CameraFollow.Instance.ActiveCursor(true);
+                CameraFollow.Instance.ActiveCursor(false);
                 character.Activate();
             },
             _exit: () =>
@@ -77,6 +75,7 @@ public class GameController : MonoBehaviour
         (
             _enter: () =>
             {
+                CameraFollow.Instance.ActiveCursor(true);
                 CameraFollow.Instance.ChangeMode(CameraFollow.CameraMode.debug45);
                 character.Activate();
             },
@@ -101,6 +100,7 @@ public class GameController : MonoBehaviour
         (
             _enter: () => 
             {
+                CameraFollow.Instance.ActiveCursor(true);
                 PlayerPanel.Open();
                 CameraFollow.Instance.ChangeMode(CameraFollow.CameraMode.lookAtPlayer);
             },
@@ -110,7 +110,7 @@ public class GameController : MonoBehaviour
             },
             _tick: () =>
             {
-                if (Input.GetButtonDown("Cancel"))
+                if (Input.GetButtonDown("Cancel") || Input.GetKeyDown(KeyCode.I))
                 {
                     ChangeState(playing);
                 }

@@ -15,9 +15,14 @@ public class PlayerView : IPausable
         events.SubscribeToEvent(event_key, action);
     }
 
+    public void Animate_Motion_Basic(float motion_value)
+    {
+        mainAnimator.SetFloat("motion", motion_value);
+    }
+
     public void Animate_Fire()
     {
-        mainAnimator.Play("PH_MoveArm_Right", ARMS_LAYER);
+        mainAnimator.Play("AttackHorizontal");
     }
 
     void IPausable.Pause()

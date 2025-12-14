@@ -33,8 +33,8 @@ public class ItemSpawner : MonoSingleton<ItemSpawner>
             customGUID: customGUID
         );
 
-    public static ResultMsg SpawnItem(int indexID, Vector3 position, int quantity = 1, string customGUID = "") => Instance._spawnItem(indexID, position, quantity, customGUID);
-    ResultMsg _spawnItem(int indexID, Vector3 position, int quant = 1, string customGUID = "")
+    public static ResultMsg SpawnItem(int indexID, Vector3 position, int quantity = 1, bool group = true, string customGUID = "") => Instance._spawnItem(indexID, position, quantity, group, customGUID);
+    ResultMsg _spawnItem(int indexID, Vector3 position, int quant = 1, bool group = true, string customGUID = "")
     {
         if (indexID == -1) return minusOne;
 
@@ -68,25 +68,37 @@ public class ItemSpawner : MonoSingleton<ItemSpawner>
         }
         else
         {
-            int steps = 0;
-            while (quant > 0)
+            if (group)
             {
-                if (steps++ > MAX_STEPS)
+                int steps = 0;
+                while (quant > 0)
                 {
-                    var ex = new System.Exception($"ItemSpawner: abortando spawn porque se superó el máximo de iteraciones ({MAX_STEPS}) para _i {indexID}");
-                    throw ex;
+                    if (steps++ > MAX_STEPS)
+                    {
+                        var ex = new System.Exception($"ItemSpawner: abortando spawn porque se superó el máximo de iteraciones ({MAX_STEPS}) para _i {indexID}");
+                        throw ex;
+                    }
+
+                    var go = pools[indexID].Get();
+                    int prev = quant;
+                    quant = go.ActivateItemRecolectable(indexID, quant);
+                    go.transform.position = position;
+
+                    if (quant == prev)
+                    {
+                        var ex = new System.Exception("ActiveItemRecolectable no redujo la cantidad de objetos");
+                        _returnItem(indexID, go);
+                        throw ex;
+                    }
                 }
-
-                var go = pools[indexID].Get();
-                int prev = quant;
-                quant = go.ActivateItemRecolectable(indexID, quant);
-                go.transform.position = position;
-
-                if (quant == prev)
+            }
+            else
+            {
+                for (int i = 0; i < quant; i++)
                 {
-                    var ex = new System.Exception("ActiveItemRecolectable no redujo la cantidad de objetos");
-                    _returnItem(indexID, go);
-                    throw ex;
+                    var go = pools[indexID].Get();
+                    go.ActivateItemRecolectable(indexID, 1);
+                    go.transform.position = position;
                 }
             }
 
