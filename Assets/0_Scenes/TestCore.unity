@@ -5269,7 +5269,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7604727443992268733, guid: ad9c92437a9765344b30032644768f9c, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.000030517578
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8193608780065793551, guid: ad9c92437a9765344b30032644768f9c, type: 3}
       propertyPath: m_AnchorMax.y
@@ -8238,6 +8238,14 @@ PrefabInstance:
       propertyPath: uiContainer
       value: 
       objectReference: {fileID: 377733371}
+    - target: {fileID: 4705503177419961037, guid: 237f1039c7f146a46a9b9586646dfde9, type: 3}
+      propertyPath: m_WarningMessage
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4705503177419961037, guid: 237f1039c7f146a46a9b9586646dfde9, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5256703104417982949, guid: 237f1039c7f146a46a9b9586646dfde9, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: -90
