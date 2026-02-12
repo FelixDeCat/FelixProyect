@@ -1,7 +1,8 @@
 using AI.Tools;
 using UnityEngine;
+using TMPro;
 
-public class GameController : MonoBehaviour
+public class GameController : MonoSingleton<GameController>
 {
     FSMLite fsm;
 
@@ -9,10 +10,15 @@ public class GameController : MonoBehaviour
 
     EState playing;
     EState paused;
-    EState menues;
     EState inventories;
-    EState animations;
     EState deb45;
+
+    [SerializeField] TextMeshProUGUI state_debug;
+
+    public override void SingletonAwake()
+    {
+
+    }
 
     private void Start()
     {
@@ -21,7 +27,7 @@ public class GameController : MonoBehaviour
         //////////////////////////////////////
         /// P L A Y I N G
         //////////////////////////////////////
-        playing = new EState().SetCallbacks
+        playing = new EState("playing").SetCallbacks
         (
             _enter: () =>
             {
@@ -37,11 +43,11 @@ public class GameController : MonoBehaviour
             {
                 if (Input.GetKeyDown(KeyCode.I))
                 {
-                    ChangeState(inventories);
+                    _changeState(inventories);
                 }
                 if (Input.GetKeyDown(KeyCode.Escape))
                 {
-                    ChangeState(deb45);
+                    _changeState(deb45);
                 }
             }
         );
@@ -50,28 +56,17 @@ public class GameController : MonoBehaviour
         //////////////////////////////////////
         /// P A U S E D
         //////////////////////////////////////
-        paused = new EState().SetCallbacks
+        paused = new EState("paused").SetCallbacks
         (
             _enter: () => { Time.timeScale = 0; },
             _exit: () => { Time.timeScale = 1; },
             _tick: () => { }
         );
 
-
-        //////////////////////////////////////
-        /// M E N U E S
-        //////////////////////////////////////
-        menues = new EState().SetCallbacks
-        (
-            _enter: () => { },
-            _exit: () => { },
-            _tick: () => { }
-        );
-
         //////////////////////////////////////
         /// D E B U G  4 5
         //////////////////////////////////////
-        deb45 = new EState().SetCallbacks
+        deb45 = new EState("Debug45").SetCallbacks
         (
             _enter: () =>
             {
@@ -87,7 +82,7 @@ public class GameController : MonoBehaviour
             {
                 if (Input.GetButtonDown("Cancel"))
                 {
-                    ChangeState(playing);
+                    _changeState(playing);
                 }
             }
         );
@@ -96,43 +91,45 @@ public class GameController : MonoBehaviour
         //////////////////////////////////////
         /// I N V E N T O R I E S
         //////////////////////////////////////
-        inventories = new EState().SetCallbacks
+        inventories = new EState("Inventories").SetCallbacks
         (
             _enter: () => 
             {
                 CameraFollow.Instance.ActiveCursor(true);
-                PlayerPanel.Open();
+                PlayerPanel.Instance.Open();
                 CameraFollow.Instance.ChangeMode(CameraFollow.CameraMode.lookAtPlayer);
             },
             _exit: () => 
-            { 
-                PlayerPanel.Close(); 
+            {
+                UIGlobalData.CloseAllUIComponents();
             },
             _tick: () =>
             {
                 if (Input.GetButtonDown("Cancel") || Input.GetKeyDown(KeyCode.I))
                 {
-                    ChangeState(playing);
+                    _changeState(playing);
                 }
             }
         );
 
-        //////////////////////////////////////
-        /// A N I M S   &   C I N E M A T I C S
-        //////////////////////////////////////
-        animations = new EState().SetCallbacks
-        (
-            _enter: () => { },
-            _exit: () => { },
-            _tick: () => { }
-        );
-
-        fsm = new FSMLite(playing);
+        fsm = new FSMLite(playing, DEBUG_OnChangeState);
 
         fsm.StartFSM();
     }
 
-    public void ChangeState(EState state)
+    public void ChangeToInventories()
+    {
+        _changeState(inventories);
+    }
+
+    public void ChangeToPlay()
+    {
+        _changeState(playing);
+    }
+
+    
+
+    void _changeState(EState state)
     {
         fsm.ChangeTo(state);
     }
@@ -141,4 +138,11 @@ public class GameController : MonoBehaviour
     {
         fsm.UpdateFSM();
     }
+
+    #region DEBUGS
+    void DEBUG_OnChangeState(string newstate)
+    {
+        if (state_debug != null) state_debug.text = newstate;
+    }
+    #endregion
 }

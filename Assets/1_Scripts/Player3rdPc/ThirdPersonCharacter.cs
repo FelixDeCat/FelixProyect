@@ -6,19 +6,26 @@ public class ThirdPersonCharacter : MonoBehaviour, IPausable
 {
     [SerializeField] ModuleHandler          moduleHandler;
     [SerializeField] MousePointModule       mousePoint;
-    [SerializeField] GroundModule           groundModule;
+    
     [SerializeField] InteractModule         interactModule;
     [SerializeField] EquipDataManager       equipDataManager;
     [SerializeField] InventoryAgent         inventoryAgent;
-    [SerializeField] PlayerView             view;
-    [SerializeField] DamageSensor           dmgSensor;
 
-    // SSM
+    [Header("::: MOTOR :::")]
+    [SerializeField] MoveControl moveControl;
+    [SerializeField] GroundModule groundModule;
+    [SerializeField] PlayerView view;
+
+    [Header("::: DAMAGE :::")]
+    [SerializeField] DamageSensor dmgSensor;
+    [SerializeField] DamageData damageDataExample;
+
+    [Header("::: STATES :::")]
     [SerializeField] BuildMode_State        stateBuildMode;
     [SerializeField] CharControl_State      stateCharControl;
     [SerializeField] Inventory_State        stateMenues;
 
-    [Header("Referencias Sueltas")]
+    
 
     bool isPaused = false;
     bool isActive = false;
@@ -38,7 +45,12 @@ public class ThirdPersonCharacter : MonoBehaviour, IPausable
         moduleHandler.AddModule(stateBuildMode);
         moduleHandler.AddModule(stateMenues);
 
-        stateCharControl.IsGroundedCallback(groundModule.IsGrounded);
+        stateCharControl.SetMoveControl(moveControl);
+        stateBuildMode.SetMoveControl(moveControl);
+        stateMenues.SetMoveControl(moveControl);
+
+        moveControl.IsGroundedCallback(groundModule.IsGrounded);
+
         stateCharControl.SetView(view);
         dmgSensor.SubscribeToDmgElement(OnElementDMG);
         stateCharControl.SubscribeToDoHit(dmgSensor.ExecuteQuery);
@@ -46,8 +58,7 @@ public class ThirdPersonCharacter : MonoBehaviour, IPausable
         interactModule.SetMousePointModule(mousePoint);
     }
 
-
-    [SerializeField] DamageData damageDataExample;
+    
     void OnElementDMG(IDamageable damaged)
     {
         if (damaged != null)

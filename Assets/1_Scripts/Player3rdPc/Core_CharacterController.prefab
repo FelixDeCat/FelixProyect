@@ -4913,7 +4913,7 @@ ParticleSystem:
     vectorLabel1_3: W
 --- !u!199 &8847276075666218511
 ParticleSystemRenderer:
-  serializedVersion: 6
+  serializedVersion: 7
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -4959,6 +4959,7 @@ ParticleSystemRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_RenderMode: 0
   m_MeshDistribution: 0
   m_SortMode: 0
@@ -4990,7 +4991,6 @@ ParticleSystemRenderer:
   m_MeshWeighting1: 1
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
-  m_MaskInteraction: 0
 --- !u!1 &2232635283746116369
 GameObject:
   m_ObjectHideFlags: 0
@@ -5038,14 +5038,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc3a3d69cb66da44d8f83c575db02ac6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  groundModule:
-    mask:
-      serializedVersion: 2
-      m_Bits: 64
-    maxDistance: 1
-    root: {fileID: 7796905561080899211}
-    count: 0
-    debug: 0
   interactModule:
     interactables:
       serializedVersion: 2
@@ -5074,6 +5066,20 @@ MonoBehaviour:
         parent: {fileID: 7732672841820451721}
     uiContainer: {fileID: 0}
     dropRoot: {fileID: 1029357473278600093}
+  moveControl:
+    camera: {fileID: 8102785659489719401}
+    rb: {fileID: 7572308892313622406}
+    speed: 5
+    turnSpeed: 10
+    jumpForce: 5
+  groundModule:
+    mask:
+      serializedVersion: 2
+      m_Bits: 64
+    maxDistance: 1
+    root: {fileID: 7796905561080899211}
+    count: 0
+    debug: 0
   view:
     mainAnimator: {fileID: 4705503177419961037}
     events: {fileID: 7958503174270333977}
@@ -5085,15 +5091,16 @@ MonoBehaviour:
     mask:
       serializedVersion: 2
       m_Bits: 1
-  stateCharControl:
-    rb: {fileID: 7572308892313622406}
-    speed: 5
-    turnSpeed: 10
-    jumpForce: 5
   damageDataExample:
     damage: 20
     knockBackInfo: []
     effects: []
+  stateBuildMode:
+    speedMultiplier: 0.5
+  stateCharControl:
+    speedMultiplier: 1
+  stateMenues:
+    speedMultiplier: 0.1
 --- !u!54 &7572308892313622406
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -5410,6 +5417,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &5705282924028819460
 GameObject:

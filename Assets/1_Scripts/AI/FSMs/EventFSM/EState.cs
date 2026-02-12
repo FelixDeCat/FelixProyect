@@ -7,6 +7,16 @@ public class EState : IState
     Action onEnter;
     Action onExit;
     Action onUpdate;
+    string name;
+    public EState(string _name)
+    {
+        name = _name;
+    }
+    public override string ToString()
+    {
+        return name;
+    }
+
     public EState OnEnter(Action onEnter)
     {
         this.onEnter = onEnter;

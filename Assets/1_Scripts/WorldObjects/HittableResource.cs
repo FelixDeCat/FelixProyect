@@ -19,8 +19,8 @@ public class HittableResource : HittableObject
 
         shakeComponent.Initialize();
 
-        Debug.Log($"{hitParticle} {(res1 ? " <color=green>se pudo " : " <color=red>no se pudo ")} cargar");
-        Debug.Log($"{deathParticle} {(res2 ? " <color=green>se pudo " : " <color=red>no se pudo ")} cargar");
+        //Debug.Log($"{hitParticle} {(res1 ? " <color=green>se pudo " : " <color=red>no se pudo ")} cargar");
+        //Debug.Log($"{deathParticle} {(res2 ? " <color=green>se pudo " : " <color=red>no se pudo ")} cargar");
     }
 
     private void Update()

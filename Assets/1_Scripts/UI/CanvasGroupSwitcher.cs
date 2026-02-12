@@ -55,6 +55,7 @@ public class CanvasGroupSwitcher
             return;
         }
         finish = OnFinish;
+        group.interactable = false; // Desactiva la interacción inmediatamente para evitar problemas durante la transición
         if (routine != null) mono.StopCoroutine(routine);
         routine = mono.StartCoroutine(TurnSwitch(false));
     }

@@ -54,33 +54,23 @@ public class InventoryAgent: IStarteable
     }
 
 
-    #region HOVER
+    //////////////////////////////////////////////////////
+    /// HOVER
+    //////////////////////////////////////////////////////
     public void OnPointerEnter(int _indexInContainer)
     {
-        // Debug.Log(_indexInContainer);
-        //var slot = container[_indexInContainer];
-        //if (slot.IndexID == -1)
-        //{
-        //    CustomConsole.LogStaticText(1, "Item: empty");
-        //    CustomConsole.LogStaticText(2, "MaxStack: empty");
-        //    return;
-        //}
-        //CustomConsole.LogStaticText(1, $"Item: {InventoryDataCenter.Get_Data_ByID(slot.IndexID).Name.FiveChar()}", color: Color.yellow);
-        //CustomConsole.LogStaticText(2, $"MaxStack: {InventoryDataCenter.Get_Data_ByID(slot.IndexID).MaxStack.ToString()}", color: Color.yellow);
-
         if(container[_indexInContainer].IndexID != -1)
             ItemFullInspector.Inspect(container[_indexInContainer]);
     }
     public void OnPointerExit(int _indexInContainer)
     {
-        //CustomConsole.LogStaticText(1, "Item:", Color.gray);
-        //CustomConsole.LogStaticText(2, "MaxStack:", Color.gray);
         ItemFullInspector.StopInspect();
     }
-    #endregion
 
+    //////////////////////////////////////////////////////
+    /// CLICK
+    //////////////////////////////////////////////////////
     int currentIndex = -1;
-
     bool awaiting = false;
     public async void OnPointerDown(int _indexInContainer, int _pointerID)
     {

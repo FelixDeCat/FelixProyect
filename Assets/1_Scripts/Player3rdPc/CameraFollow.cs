@@ -2,8 +2,6 @@ using UnityEngine;
 
 public class CameraFollow : MonoSingleton<CameraFollow>
 {
-
-
     float yaw;
     float pitch;
     float rotSpeed = 3;
@@ -50,8 +48,6 @@ public class CameraFollow : MonoSingleton<CameraFollow>
         rig = target.GetComponent<Rigidbody>();
         yaw = target.eulerAngles.y;
         pitch = 0;
-
-         
     }
 
     bool isActive;
