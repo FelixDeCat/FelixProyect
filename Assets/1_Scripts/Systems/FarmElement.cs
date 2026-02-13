@@ -33,16 +33,9 @@ public class FarmElement : MonoBehaviour
 
     public void Interact()
     {
-        ContextualMenu.Open(
-            "Planta", 
-                new System.Tuple<Action, string, bool>(
-                    DEBUG_Guardar_Persistencia, 
-                    "guardar", 
-                    true),
-                new System.Tuple<Action, string, bool>(
-                    FuncionVacia,
-                    "ejemplo2",
-                    false));
+            ContextualMenu
+            .Begin("Planta")
+            .AddOption("guardar",DEBUG_Guardar_Persistencia,"Guarad la persistencia del objeto",false);
     }
 
     public void FuncionVacia()

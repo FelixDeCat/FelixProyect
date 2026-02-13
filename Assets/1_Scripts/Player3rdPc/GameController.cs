@@ -11,6 +11,7 @@ public class GameController : MonoSingleton<GameController>
     EState playing;
     EState paused;
     EState inventories;
+    EState contextual;
     EState deb45;
 
     [SerializeField] TextMeshProUGUI state_debug;
@@ -31,13 +32,15 @@ public class GameController : MonoSingleton<GameController>
         (
             _enter: () =>
             {
+                character.SetStateTo_CharControl();
                 CameraFollow.Instance.ChangeMode(CameraFollow.CameraMode.thirdPersonCam);
                 CameraFollow.Instance.ActiveCursor(false);
-                character.Activate();
+                character.Activate_Modules();
             },
             _exit: () =>
             {
-                character.Deactivate();
+                character.Deactivate_Modules();
+                
             },
             _tick: () =>
             {
@@ -51,7 +54,6 @@ public class GameController : MonoSingleton<GameController>
                 }
             }
         );
-
 
         //////////////////////////////////////
         /// P A U S E D
@@ -72,7 +74,7 @@ public class GameController : MonoSingleton<GameController>
             {
                 CameraFollow.Instance.ActiveCursor(true);
                 CameraFollow.Instance.ChangeMode(CameraFollow.CameraMode.debug45);
-                character.Activate();
+                character.Activate_Modules();
             },
             _exit: () =>
             {
@@ -87,7 +89,6 @@ public class GameController : MonoSingleton<GameController>
             }
         );
 
-
         //////////////////////////////////////
         /// I N V E N T O R I E S
         //////////////////////////////////////
@@ -95,6 +96,7 @@ public class GameController : MonoSingleton<GameController>
         (
             _enter: () => 
             {
+                character.SetStateTo_Menues();
                 CameraFollow.Instance.ActiveCursor(true);
                 PlayerPanel.Instance.Open();
                 CameraFollow.Instance.ChangeMode(CameraFollow.CameraMode.lookAtPlayer);
@@ -112,8 +114,34 @@ public class GameController : MonoSingleton<GameController>
             }
         );
 
-        fsm = new FSMLite(playing, DEBUG_OnChangeState);
+        //////////////////////////////////////
+        /// C O N T E X T U A L
+        //////////////////////////////////////
+        contextual = new EState("contextual").SetCallbacks
+        (
+            _enter: () =>
+            {
+                character.SetStateTo_Menues();
+                CameraFollow.Instance.ActiveCursor(true);
+                PlayerPanel.Instance.Open();
+                CameraFollow.Instance.ChangeMode(CameraFollow.CameraMode.none);
+            },
+            _exit: () =>
+            {
+                UIGlobalData.CloseAllUIComponents();
+            },
+            _tick: () =>
+            {
+                if (Input.GetButtonDown("Cancel") || Input.GetKeyDown(KeyCode.I))
+                {
+                    _changeState(playing);
+                }
+            }
+        );
 
+        character.StartPlayer();
+
+        fsm = new FSMLite(playing, DEBUG_OnChangeState);
         fsm.StartFSM();
     }
 
@@ -125,6 +153,10 @@ public class GameController : MonoSingleton<GameController>
     public void ChangeToPlay()
     {
         _changeState(playing);
+    }
+    public void ChangeToContextual()
+    {
+        _changeState(contextual);
     }
 
     

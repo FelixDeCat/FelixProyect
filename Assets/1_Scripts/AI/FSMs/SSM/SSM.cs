@@ -35,7 +35,6 @@ namespace AI.Tools
                 current.Update();
             }
         }
-
         public void FixedUpdateFSM()
         {
             if (physicUpdate != null)

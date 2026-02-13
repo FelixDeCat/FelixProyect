@@ -16,7 +16,7 @@ TagManager:
   - obstacle
   - interactables
   - NoPlayerInteract
-  - 
+  - PlayerRender
   - 
   - 
   - 

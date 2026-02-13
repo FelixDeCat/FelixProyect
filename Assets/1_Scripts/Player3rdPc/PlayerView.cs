@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 [System.Serializable]
-public class PlayerView : IPausable
+public class PlayerView : IPausable, IActivable
 {
     [SerializeField] Animator mainAnimator;
     [SerializeField] AnimEvents events;
@@ -33,5 +33,16 @@ public class PlayerView : IPausable
     void IPausable.Resume()
     {
         
+    }
+
+    void IActivable.Active()
+    {
+        
+    }
+
+    void IActivable.Deactivate()
+    {
+        Debug.Log("Player deactivate");
+        mainAnimator.SetFloat("motion", 0f);
     }
 }

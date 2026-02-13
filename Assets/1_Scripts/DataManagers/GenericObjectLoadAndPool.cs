@@ -11,6 +11,13 @@ public class GenericObjectLoadAndPool<T> where T : Component
     Action<T> _onGet;
     Action<T> _onRelease;
     Action<T, string> _onCreate;
+
+    ///////////////////////////////////////
+    /// C O N S T R U C T O R E S
+    ///////////////////////////////////////
+    /////////
+    //////
+    ///
     public GenericObjectLoadAndPool()
     {
         _onGet = null;
@@ -29,18 +36,23 @@ public class GenericObjectLoadAndPool<T> where T : Component
         _onRelease = onRelease;
         _onCreate = onCreate;
     }
+
     ///////////////////////////////////////
     /// F R O M   R E S O U R C E S
     ///////////////////////////////////////
+    /////////
+    //////
     ///
     public async Task<bool> Preload(string path, string name, int defaultCapacity = 10)
     {
+        // 1° Primero reviso si ya lo tenia
         if (objects.ContainsKey(name))
         {
             if (objects[name] != null)
                 return false;
         }
 
+        // 2° Lo levanto de Resources
         ResourceRequest request = Resources.LoadAsync<T>($"{path}/{name}");
         while (!request.isDone)
         {
@@ -51,6 +63,8 @@ public class GenericObjectLoadAndPool<T> where T : Component
             Debug.LogWarning($"Prefab no encontrado en Resources en {path}/{name}");
             return false;
         }
+
+        // 3° Creo el pool
         var pool = new ObjectPool<T>
         (
             createFunc: () => 
@@ -75,6 +89,7 @@ public class GenericObjectLoadAndPool<T> where T : Component
             maxSize: 100
         );
 
+        // 4° Lo guardo en el diccionario
         objects[name] = pool;
 
         CustomConsole.LogPass($"Asset cargado de {path}/{name}");
@@ -84,17 +99,20 @@ public class GenericObjectLoadAndPool<T> where T : Component
     ///////////////////////////////////////
     /// P R E F A B
     ///////////////////////////////////////
+    /////////
+    //////
     ///
     public bool Preload(T prefab, int defaultCapacity)
     {
+        // 1° Primero reviso si ya lo tenia
         string name_key = prefab.name;
-
         if (objects.ContainsKey(name_key))
         {
             if (objects[name_key] != null)
                 return false;
         }
 
+        // 2° Creo el pool
         var pool = new ObjectPool<T>
         (
            createFunc: () => 
@@ -119,6 +137,7 @@ public class GenericObjectLoadAndPool<T> where T : Component
            maxSize: 100
         );
 
+        // 3° Lo guardo en el diccionario
         objects[name_key] = pool;
 
         CustomConsole.LogPass($"Pool Cargado");
@@ -128,6 +147,9 @@ public class GenericObjectLoadAndPool<T> where T : Component
     ///////////////////////////////////////
     /// G E T  -  R E L E A S E
     ///////////////////////////////////////
+    /////////
+    //////
+    ///
     public T Get(string name)
     {
         return objects[name].Get();
@@ -141,4 +163,60 @@ public class GenericObjectLoadAndPool<T> where T : Component
             objects[name_key].Release(go);
         }
     }
+
+    #region TO-DO: LOAD FROM ADDRESSABLES
+    ///////////////////////////////////////
+    /// TO DO: LOAD FROM ADDRESSABLES
+    ///////////////////////////////////////
+    /////////
+    //////   /// HACER QUE FUNCIONE BIEN
+    ///
+    //public async Task<bool> PreloadFromAddressables(string address, string name, int defaultCapacity = 10)
+    //{
+    //    // 1° Primero reviso si ya lo tenia
+    //    if (objects.ContainsKey(name))
+    //    {
+    //        if (objects[name] != null)
+    //            return false;
+    //    }
+    //    // 2° Lo levanto de Addressables
+    //    var handle = UnityEngine.AddressableAssets.Addressables.LoadAssetAsync<T>(address);
+    //    await handle.Task;
+    //    if (handle.Status != UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationStatus.Succeeded)
+    //    {
+    //        Debug.LogWarning($"Prefab no encontrado en Addressables en {address}");
+    //        return false;
+    //    }
+    //    // 3° Creo el pool
+    //    var pool = new ObjectPool<T>
+    //    (
+    //        createFunc: () => 
+    //        {
+    //            var go = GameObject.Instantiate(handle.Result);
+    //            _onCreate?.Invoke(go, name);
+    //            return go;
+    //        },
+    //        actionOnGet: (go) =>
+    //        {
+    //            go.gameObject.SetActive(true);
+    //            _onGet?.Invoke(go);
+    //        },
+    //        actionOnRelease: (go) =>
+    //        {
+    //            go.gameObject.SetActive(false);
+    //            _onRelease?.Invoke(go);
+    //        },
+    //        actionOnDestroy: (go) => { GameObject.Destroy(go.gameObject); },
+    //        collectionCheck: true,
+    //        defaultCapacity: defaultCapacity,
+    //        maxSize: 100
+    //    );
+    //    // 4° Lo guardo en el diccionario
+    //    objects[name] = pool;
+    //    CustomConsole.LogPass($"Asset cargado de Addressables en {address}");
+    //    return true;
+    //}
+    #endregion
+
+
 }

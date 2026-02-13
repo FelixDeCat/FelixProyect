@@ -20,7 +20,7 @@ public class CameraFollow : MonoSingleton<CameraFollow>
 
     [SerializeField] Transform target;
 
-    [SerializeField] Transform lookAtPlayer;
+    
 
     [SerializeField] float distance = 5;
     [SerializeField] float height = 2;
@@ -35,8 +35,15 @@ public class CameraFollow : MonoSingleton<CameraFollow>
 
     Rigidbody rig;
 
+    [Header("Inventory View Options")]
+    [SerializeField] Transform lookAtPlayer;
+    [SerializeField] GameObject[] inventoryAuxObjects;
+    int cullingMaskDefault;
+
     [Header("Debug 45 Degrees Hard Follow")]
     public Vector3 offsetDeb = new Vector3(0, 10, -10);
+
+    
 
     public override void SingletonAwake()
     {
@@ -48,6 +55,7 @@ public class CameraFollow : MonoSingleton<CameraFollow>
         rig = target.GetComponent<Rigidbody>();
         yaw = target.eulerAngles.y;
         pitch = 0;
+        cullingMaskDefault = Camera.main.cullingMask;
     }
 
     bool isActive;
@@ -62,6 +70,34 @@ public class CameraFollow : MonoSingleton<CameraFollow>
     public void ChangeMode(CameraMode _mode)
     {
         mode = _mode;
+
+        switch (_mode)
+        {
+            case CameraMode.none:
+                Cursor.visible = true;
+                Cursor.lockState = CursorLockMode.None;
+                 for (int i = 0; i < inventoryAuxObjects.Length; i++) inventoryAuxObjects[i].SetActive(false);
+                break;
+
+            case CameraMode.thirdPersonCam:
+                Camera.main.cullingMask = cullingMaskDefault;
+                for (int i = 0; i < inventoryAuxObjects.Length; i++) inventoryAuxObjects[i].SetActive(false);
+                break;
+
+            case CameraMode.debug45:
+                Cursor.visible = true;
+                Cursor.lockState = CursorLockMode.None;
+                for (int i = 0; i < inventoryAuxObjects.Length; i++) inventoryAuxObjects[i].SetActive(false);
+                break;
+
+            case CameraMode.lookAtPlayer:
+                Cursor.visible = true;
+                Cursor.lockState = CursorLockMode.None;
+                for (int i = 0; i < inventoryAuxObjects.Length; i++) inventoryAuxObjects[i].SetActive(true);
+                Camera.main.cullingMask = 1 << LayerMask.NameToLayer("PlayerRender");
+
+                break;
+        }
     }
     public void ActiveCursor(bool val)
     {
@@ -126,23 +162,22 @@ public class CameraFollow : MonoSingleton<CameraFollow>
                 camRightFlat * lookRelativeOffset.x +
                 Vector3.up * lookRelativeOffset.y;
 
-
             desiredRot = Quaternion.LookRotation(loookTarget - transform.position);
             transform.rotation = desiredRot;
         }
         else if (mode == CameraMode.debug45)
         {
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
             transform.position = target.position + offsetDeb;
             transform.LookAt(target);
         }
         else if (mode == CameraMode.lookAtPlayer)
         {
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
             transform.position = lookAtPlayer.transform.position;
             transform.eulerAngles = lookAtPlayer.eulerAngles;
+        }
+        else if (mode == CameraMode.none)
+        {
+            //no hago nada
         }
     }
 

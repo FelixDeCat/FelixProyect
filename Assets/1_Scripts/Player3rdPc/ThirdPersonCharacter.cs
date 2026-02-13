@@ -21,11 +21,10 @@ public class ThirdPersonCharacter : MonoBehaviour, IPausable
     [SerializeField] DamageData damageDataExample;
 
     [Header("::: STATES :::")]
+    [SerializeField] bool startPlaying = true;
     [SerializeField] BuildMode_State        stateBuildMode;
     [SerializeField] CharControl_State      stateCharControl;
     [SerializeField] Inventory_State        stateMenues;
-
-    
 
     bool isPaused = false;
     bool isActive = false;
@@ -39,6 +38,7 @@ public class ThirdPersonCharacter : MonoBehaviour, IPausable
         moduleHandler.AddModule(interactModule);
         moduleHandler.AddModule(equipDataManager);
         moduleHandler.AddModule(inventoryAgent);
+        moduleHandler.AddModule(view);
 
         // SSM States
         moduleHandler.AddModule(stateCharControl);
@@ -56,43 +56,35 @@ public class ThirdPersonCharacter : MonoBehaviour, IPausable
         stateCharControl.SubscribeToDoHit(dmgSensor.ExecuteQuery);
 
         interactModule.SetMousePointModule(mousePoint);
+
+        ssm = new SSM(stateCharControl);
     }
 
-    
-    void OnElementDMG(IDamageable damaged)
-    {
-        if (damaged != null)
-        {
-            damaged.Damage(damageDataExample);
-        }
-    }
-
-    private void Start()
+    public void StartPlayer()
     {
         moduleHandler.Start();
-        SetBrain();
-    }
-
-    public void SetBrain()
-    {
-        ssm = new SSM(stateCharControl);
         ssm.StartFSM();
     }
-    public void Activate()
+
+    public void SetStateTo_CharControl() => ssm.ChangeTo(stateCharControl);
+    public void SetStateTo_Menues() => ssm.ChangeTo(stateMenues);
+    public void SetStateTo_Build() => ssm.ChangeTo(stateBuildMode);
+
+    public void Activate_Modules()
     {
         isActive = true;
         moduleHandler.Activate();
     }
-    public void Deactivate()
+    public void Deactivate_Modules()
     {
         isActive = false;
         moduleHandler.Deactivate();
     }
-
-    void ResetModules()
+    public void Reset_Modules()
     {
         moduleHandler.Reset();
     }
+
     void Update()
     {
         if (!isActive) return;
@@ -105,6 +97,14 @@ public class ThirdPersonCharacter : MonoBehaviour, IPausable
         if(!isActive) return;
         if (isPaused) return;
         moduleHandler.FixedTick(Time.deltaTime);
+    }
+
+    void OnElementDMG(IDamageable damaged)
+    {
+        if (damaged != null)
+        {
+            damaged.Damage(damageDataExample);
+        }
     }
 
     private void OnDrawGizmos()

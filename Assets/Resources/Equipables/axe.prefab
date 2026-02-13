@@ -96,6 +96,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: axe
       objectReference: {fileID: 0}
+    - target: {fileID: 2078619493160776875, guid: 33cc9f813b2e89b428cf1bf6ae3890de, type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
     - target: {fileID: 5635062510269911263, guid: 33cc9f813b2e89b428cf1bf6ae3890de, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -104,6 +108,10 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 3ef1c759e719939429bebac1726e0afe, type: 2}
+    - target: {fileID: 6332915940532564224, guid: 33cc9f813b2e89b428cf1bf6ae3890de, type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

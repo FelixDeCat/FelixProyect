@@ -12,14 +12,14 @@ public class IndexableButton : MonoBehaviour, IPointerEnterHandler, IPointerExit
     Action<int> callback;
     int index = -1;
 
-    string description = "";
+    string tooltip = "";
 
-    public void Set(Action<int> callback,int index, string text, string desc)
+    public void Set(Action<int> callback,int index, string text, string tooltip)
     {
         this.callback = callback;
         this.index = index;
         myText.text = text;
-        description = desc;
+        this.tooltip = tooltip;
         myButton.onClick.AddListener(() => callback.Invoke(index));
     }
 
@@ -29,12 +29,12 @@ public class IndexableButton : MonoBehaviour, IPointerEnterHandler, IPointerExit
         callback = null;
         index = -1;
         myText.text = string.Empty;
-        description = string.Empty;
+        tooltip = string.Empty;
     }
 
     void IPointerEnterHandler.OnPointerEnter(PointerEventData eventData)
     {
-        TooltipInGame.Instance.ShowTooltip(description, eventData.position);
+        TooltipInGame.Instance.ShowTooltip(tooltip, eventData.position);
     }
 
     void IPointerExitHandler.OnPointerExit(PointerEventData eventData)

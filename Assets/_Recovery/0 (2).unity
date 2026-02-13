@@ -2094,7 +2094,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &368264505
 Transform:
   m_ObjectHideFlags: 0
@@ -2520,7 +2520,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &465823680
 Transform:
   m_ObjectHideFlags: 0
@@ -8315,6 +8315,7 @@ GameObject:
   - component: {fileID: 1769867917}
   - component: {fileID: 1769867920}
   - component: {fileID: 1769867919}
+  - component: {fileID: 1769867921}
   m_Layer: 10
   m_Name: FarmElement
   m_TagString: Untagged
@@ -8376,12 +8377,12 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.4519663, y: 1.1141737, z: 0.4748016}
-  m_Center: {x: -0.0076117516, y: 0.55183923, z: 0.0038059056}
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1769867920
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8394,6 +8395,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2526e3a30c2ce14e9b4a26d847c509d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Interactable
+--- !u!54 &1769867921
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1769867916}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0
 --- !u!1 &1774992563
 GameObject:
   m_ObjectHideFlags: 0

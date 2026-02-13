@@ -38,6 +38,18 @@ public class MoveControl
         }
     }
 
+    public void Stop()
+    {
+        canMove = false;
+        input.x = 0;
+        input.z = 0;
+
+        rb.linearVelocity = new Vector3(
+                ground ? 0 : rb.linearVelocity.x,
+                originalY,
+                ground ? 0 : rb.linearVelocity.z);
+    }
+
     Vector3 result = Vector3.zero;
 
     public void FixedTick(float speedMultiplier)

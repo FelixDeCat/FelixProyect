@@ -1,23 +1,26 @@
-using System.Collections.Generic;
 using System;
-using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.Pool;
+using System.Collections.Generic;
 using TMPro;
+using UnityEngine;
+using UnityEngine.Pool;
+using UnityEngine.UI;
+using static UnityEditor.Progress;
 
 public class ContextualMenu : MonoUISingleton<ContextualMenu>
 {
-
-
     [Header("Contextual Menu")]
     [SerializeField] TextMeshProUGUI txt_name;
-    Tuple<Action, string, bool>[] callbacks = new Tuple<Action, string, bool>[0];
+    List<ContextualMenuOption> options = new List<ContextualMenuOption>();
 
+    [SerializeField] Button btn_close;
+
+    [Header("Instanciado de Botones")]
     [SerializeField] Transform parent;
     [SerializeField] IndexableButton buttonPrefab;
+
     ObjectPool<IndexableButton> btn_pool;
     HashSet<IndexableButton> actives = new HashSet<IndexableButton>();
-    [SerializeField] Button btn_close;
+    
     private void Start()
     {
         btn_pool = new ObjectPool<IndexableButton>(
@@ -30,7 +33,7 @@ public class ContextualMenu : MonoUISingleton<ContextualMenu>
             maxSize: 10
         );
 
-        btn_close.onClick.AddListener(() => Close(removeFromManager: true));
+        btn_close.onClick.AddListener(() => GameController.Instance.ChangeToPlay());
     }
 
     public override void SingletonAwake()
@@ -38,45 +41,40 @@ public class ContextualMenu : MonoUISingleton<ContextualMenu>
 
     }
 
-    //// O P E N 
-    
-    /// <summary>
-    /// Opens a menu with the specified name and attaches callback actions to menu events.
-    /// </summary>
-    /// <remarks>Each tuple in the <paramref name="_cbk"/> array represents a menu event handler, where the
-    /// <see cref="Action"/> is invoked for the event, the string provides an identifier or context, and the boolean
-    /// flag may control handler behavior. The method is static and can be called without creating an
-    /// instance.</remarks>
-    /// <param name="_name">The name of the menu to open. Cannot be null or empty.</param>
-    /// <param name="_cbk">An array of tuples, each containing a callback action, a string identifier, and a boolean flag. Used to
-    /// configure menu event handlers. Can be empty if no callbacks are required.</param>
-    public static void Open(string _name, params Tuple<Action, string, bool>[] _cbk)
+    // BUILDER
+    public static ContextualMenu Begin(string _name)
     {
-        Instance.OpenMenu(_name, _cbk);
+        Instance._openMenu(_name);
+        return Instance;
     }
-    void OpenMenu(string _name, params Tuple<Action, string, bool>[] _cbk)
+    public ContextualMenu AddOption(string _name, Action _action, string tooltip = "", bool closeOnClick = true)
+    {
+        ContextualMenuOption option = new ContextualMenuOption(_action, _name, tooltip, closeOnClick);
+        _addOption(option);
+        return this;
+    }
+    void _openMenu(string _name)
     {
         txt_name.text = _name;
-        callbacks = _cbk;
-        for (int i = 0; i < callbacks.Length; i++)
-        {
-            var btn = btn_pool.Get();
-
-            btn.Set(x => OnClick(x), i, callbacks[i].Item2, "test"); // El string vacío es un placeholder para la descripción
-
-            Debug.Log("Asignando callback al botón " + i + " con acción: " + callbacks[i].Item2);
-            actives.Add(btn);
-            btn.GetComponentInChildren<TextMeshProUGUI>().text = callbacks[i].Item2;
-        }
         Open();
-        GameController.Instance.ChangeToInventories();
+        GameController.Instance.ChangeToContextual();
         UIGlobalData.AddUiComponent(this);
     }
-
-    void OnClick(int index)
+    void _addOption(ContextualMenuOption option)
     {
-        callbacks[index].Item1.Invoke();
-        if (callbacks[index].Item3)
+        if (!options.Contains(option)) 
+        { 
+            options.Add(option);
+            var btn = btn_pool.Get();
+            btn.Set(x => OnClickList(x), options.Count - 1, option.name, option.tooltip);
+            actives.Add(btn);
+        }
+    }
+    
+    void OnClickList(int index)
+    {
+        options[index].action.Invoke();
+        if (options[index].closeOnClick)
         {
             GameController.Instance.ChangeToPlay();
         }
@@ -88,13 +86,29 @@ public class ContextualMenu : MonoUISingleton<ContextualMenu>
     }
     protected override void EVENT_Close_Sucess()
     {
+        options.Clear();
+
         txt_name.text = string.Empty;
-        callbacks = new Tuple<Action, string, bool>[0];
         foreach (var btn in actives)
         {
             btn.Clear();
             btn_pool.Release(btn);
         }
 
+    }
+
+    public struct ContextualMenuOption
+    {
+        public Action action;
+        public string name;
+        public string tooltip;
+        public bool closeOnClick;
+        public ContextualMenuOption(Action action, string name, string tooltip = "", bool closeOnClick = true)
+        {
+            this.action = action;
+            this.name = name;
+            this.tooltip = tooltip;
+            this.closeOnClick = closeOnClick;
+        }
     }
 }

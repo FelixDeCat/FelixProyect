@@ -4,18 +4,14 @@ using UnityEngine;
 public abstract class UIComponent : MonoBehaviour
 {
     [Header("UIComponent")]
-    [SerializeField] protected CanvasGroup group;
+    [SerializeField] private CanvasGroup group;
+    [SerializeField] private float transitionTime = 0.2f;
+    [SerializeField] private bool startOpen = false;
 
-    [SerializeField] bool interactable = false;
-
-
-    [SerializeField] float transitionTime = 0.2f;
-    CanvasGroupSwitcher switcher;
     protected PanelFSM fsm;
+    private CanvasGroupSwitcher switcher;
 
-    [SerializeField] TextMeshProUGUI txt_debug;
-
-    public bool startOpen = false;
+    [SerializeField] private TextMeshProUGUI txt_debug;
 
     protected void CustomAwake()
     {
@@ -45,12 +41,10 @@ public abstract class UIComponent : MonoBehaviour
         UIGlobalData.AddUiComponent(this);
         fsm.Open();
     }
-    public void Close(bool removeFromManager = false)
+    public void Close()
     {
-        if (removeFromManager)
-        {
-            UIGlobalData.RemoveUIComponent(this);
-        }
+        UIGlobalData.RemoveUIComponent(this);
+        UIGlobalData.CloseAllUIComponents();
         fsm.Close();
     }
 

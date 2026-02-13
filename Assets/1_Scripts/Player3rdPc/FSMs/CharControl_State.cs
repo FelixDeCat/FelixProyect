@@ -30,7 +30,8 @@ public class CharControl_State : StateBase, IStarteable, IFixedUpdateable
 
     public override void OnExit()
     {
-        
+        view.Animate_Motion_Basic(0f);
+        moveControl.Stop();
     }
 
     protected override void OnPause()

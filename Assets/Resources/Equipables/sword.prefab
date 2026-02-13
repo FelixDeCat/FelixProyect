@@ -46,7 +46,7 @@ GameObject:
   - component: {fileID: 8280966509713179803}
   - component: {fileID: 4441557237867124413}
   - component: {fileID: 2980788893899494040}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -123,6 +123,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &7091950688001646109
 GameObject:
@@ -135,7 +136,7 @@ GameObject:
   - component: {fileID: 3813092819863264352}
   - component: {fileID: 3459548676669236506}
   - component: {fileID: 5053035790996553784}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -212,6 +213,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &8921895598341867715
 GameObject:
@@ -224,7 +226,7 @@ GameObject:
   - component: {fileID: 4245613887668386568}
   - component: {fileID: 6330627797704064408}
   - component: {fileID: 4525436918662266892}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: palo (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -301,6 +303,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &8963141782756988762
 GameObject:
@@ -313,7 +316,7 @@ GameObject:
   - component: {fileID: 3860306080718636711}
   - component: {fileID: 2182183860886529020}
   - component: {fileID: 5149713486211065238}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: palo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -390,4 +393,5 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}

@@ -9,12 +9,6 @@ public class PlayerPanel : MonoUISingleton<PlayerPanel>
 
     }
 
-
-
     public static void Wait() => Instance.fsm.Wait();
     public static void Select() => Instance.fsm.Select();
-
-
-
-
 }
