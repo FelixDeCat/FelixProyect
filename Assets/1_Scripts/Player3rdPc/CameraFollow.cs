@@ -1,3 +1,4 @@
+using Unity.Android.Gradle.Manifest;
 using UnityEngine;
 
 public class CameraFollow : MonoSingleton<CameraFollow>
@@ -67,6 +68,7 @@ public class CameraFollow : MonoSingleton<CameraFollow>
         Cursor.lockState = value ? CursorLockMode.Locked : CursorLockMode.None;
     }
 
+    bool oneshotposition = false;
     public void ChangeMode(CameraMode _mode)
     {
         mode = _mode;
@@ -80,6 +82,7 @@ public class CameraFollow : MonoSingleton<CameraFollow>
                 break;
 
             case CameraMode.thirdPersonCam:
+                oneshotposition = true;
                 Camera.main.cullingMask = cullingMaskDefault;
                 for (int i = 0; i < inventoryAuxObjects.Length; i++) inventoryAuxObjects[i].SetActive(false);
                 break;
@@ -142,6 +145,12 @@ public class CameraFollow : MonoSingleton<CameraFollow>
 
             desiredPosition = basePosition + rotation * positionRelativeOffset;
 
+            if (oneshotposition)
+            {
+                oneshotposition = false;
+                transform.position = desiredPosition;
+            }
+
             transform.position = Vector3.SmoothDamp
                 (transform.position,
                 desiredPosition,
@@ -154,7 +163,6 @@ public class CameraFollow : MonoSingleton<CameraFollow>
 
             // Derecha estable
             camRightFlat = Vector3.Cross(Vector3.up, camForwardFlat);
-
 
             Vector3 baseTarget = target.position;
 
